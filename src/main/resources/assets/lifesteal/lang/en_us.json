@@ -1,0 +1,22 @@
+{
+  "item.lifesteal.heart_core": "Heart Core",
+  "item.lifesteal.heart_fragment": "Heart Fragment",
+  "item.lifesteal.heart_crystal": "Heart Crystal",
+  "block.lifesteal.heart_core_block": "Heart Core Block",
+  "block.lifesteal.heart_ore": "Heart Ore",
+  "block.lifesteal.deepslate_heart_ore": "Deepslate Heart Ore",
+  "block.lifesteal.netherrack_heart_ore": "Netherrack Heart Ore",
+
+  "enchantment.lifesteal.lifesteal": "Lifesteal",
+
+  "itemGroup.lifesteal": "Lifesteal",
+
+  "advancements.lifesteal.get_fragment.title": "Fragment of the Past",
+  "advancements.lifesteal.get_fragment.desc": "The beginning of the end.",
+  "advancements.lifesteal.get_heart_core.title": "A Beacon of Hope",
+  "advancements.lifesteal.get_heart_core.desc": "Retrieve the core of a heart crystal.",
+  "advancements.lifesteal.get_heart_crystal.title": "Once Upon a Time..",
+  "advancements.lifesteal.get_heart_crystal.desc": "Shiny shiny heart.. oh what shall I do with you?",
+  "advancements.lifesteal.get_10_max_hearts.title": "Invincible",
+  "advancements.lifesteal.get_10_max_hearts.desc": "Get 10 permanent new max hearts."
+}

@@ -1,29 +1,32 @@
 {
   "schemaVersion": 1,
-  "id": "modid",
+  "id": "lifesteal",
   "version": "${version}",
 
-  "name": "Example Mod",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "name": "Lifesteal",
+  "description": "A mod where killing other players steals their hearts. This is a forge interpretation of the Lifesteal SMP.",
   "authors": [
-    "Me!"
+    "LoxiGoose"
   ],
   "contact": {
-    "homepage": "https://fabricmc.net/",
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/lifesteal-forge",
     "sources": "https://github.com/FabricMC/fabric-example-mod"
   },
 
-  "license": "CC0-1.0",
-  "icon": "assets/modid/icon.png",
+  "license": "GNU GENERAL PUBLIC LICENSE",
+  "icon": "assets/lifesteal/icon.png",
 
   "environment": "*",
   "entrypoints": {
     "main": [
-      "net.fabricmc.example.ExampleMod"
+      "net.goose.lifesteal.LifeSteal"
+    ],
+    "client": [
+      "net.goose.lifesteal.LifeStealClient"
     ]
   },
   "mixins": [
-    "modid.mixins.json"
+    "lifesteal.mixins.json"
   ],
 
   "depends": {
