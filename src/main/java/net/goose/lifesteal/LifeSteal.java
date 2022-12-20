@@ -8,7 +8,8 @@ import net.goose.lifesteal.command.ModCommands;
 import net.goose.lifesteal.config.ModConfig;
 import net.goose.lifesteal.event.ModEvents;
 import net.goose.lifesteal.item.ModItems;
-import net.goose.lifesteal.worldgen.ModBiomeModifier;
+import net.goose.lifesteal.world.feature.ModConfiguredFeatures;
+import net.goose.lifesteal.world.gen.ModBiomeModifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,9 +25,13 @@ public class LifeSteal implements ModInitializer {
 		config = AutoConfig.getConfigHolder(ModConfig.class).getConfig();
 		ModItems.register();
 		ModBlocks.register();
+
 		ModEvents.register();
 		ModCommands.register();
+
+		ModConfiguredFeatures.register();
 		ModBiomeModifier.register();
+
 		ModCriteria.register();
 	}
 }
