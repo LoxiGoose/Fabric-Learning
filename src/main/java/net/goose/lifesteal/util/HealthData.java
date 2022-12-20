@@ -92,33 +92,27 @@ public class HealthData {
         }
 
         if(livingEntity.getMaxHealth() <= 1 && heartDifference <= -20){
-            if(LifeSteal.config.Maximums.MaximumHitPointsPlayerCanLose < 0) {
-                setData(player, LifeSteal.config.StartingConfigurations.StartingHitPointDifference);
-                refreshHearts(player, livingEntity);
+            setData(player, LifeSteal.config.StartingConfigurations.StartingHitPointDifference);
+            refreshHearts(player, livingEntity);
 
-                if (livingEntity instanceof ServerPlayerEntity serverPlayer) {
+            if (livingEntity instanceof ServerPlayerEntity serverPlayer) {
 
-                    if (LifeSteal.config.StartingConfigurations.BannedUponLosingAllHearts) {
+                if (LifeSteal.config.StartingConfigurations.BannedUponLosingAllHearts) {
 
-                        @Nullable Text text = Text.translatable("You have lost all your lives and max hearts, you are now permanently banned till further notice.");
+                    @Nullable Text text = Text.translatable("You have lost all your lives and max hearts, you are now permanently banned till further notice.");
 
-                        BannedPlayerList userbanlist = serverPlayer.getServer().getPlayerManager().getUserBanList();
+                    BannedPlayerList userbanlist = serverPlayer.getServer().getPlayerManager().getUserBanList();
+                    serverPlayer.getGameProfile();
+                    GameProfile gameprofile = serverPlayer.getGameProfile();
+                    BannedPlayerEntry userbanlistentry = new BannedPlayerEntry(gameprofile, null, "Lifesteal", null, text == null ? null : text.getString());
+                    userbanlist.add(userbanlistentry);
 
-                        serverPlayer.getGameProfile();
-
-                        GameProfile gameprofile = serverPlayer.getGameProfile();
-
-                        BannedPlayerEntry userbanlistentry = new BannedPlayerEntry(gameprofile, null, "Lifesteal", null, text == null ? null : text.getString());
-                        userbanlist.add(userbanlistentry);
-
-                        if (serverPlayer != null) {
-                            serverPlayer.networkHandler.disconnect(Text.translatable("You have lost all your max hearts, you are now permanently banned till further notice."));
-                        }
-                    } else if (!serverPlayer.isSpectator()) {
-                        serverPlayer.changeGameMode(GameMode.SPECTATOR);
-
-                        livingEntity.sendMessage(Text.translatable("You have lost all your max hearts. You are now permanently dead."));
+                    if (serverPlayer != null) {
+                        serverPlayer.networkHandler.disconnect(Text.translatable("You have lost all your max hearts, you are now permanently banned till further notice."));
                     }
+                } else if (!serverPlayer.isSpectator()) {
+                    serverPlayer.changeGameMode(GameMode.SPECTATOR);
+                    livingEntity.sendMessage(Text.translatable("You have lost all your max hearts. You are now permanently dead."));
                 }
             }
         }

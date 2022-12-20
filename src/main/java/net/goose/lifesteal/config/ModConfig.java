@@ -57,7 +57,7 @@ public class ModConfig implements ConfigData {
     public static class Maximums{
         @Comment("This value makes a limit SET after your Starting HitPoint Difference for how many hit points/hearts a player can get. 2 hit points = 1 heart. Set this to less than 1 to disable the feature; Default is -1")
         public int MaximumHitPointsPlayerCanGet = -1;
-        @Comment("THIS IS INCOMPATIBLE WITH LIVES. IF YOU ENABLE BOTH, LIVES WILL AUTOMATICALLY BE DISABLED. This value makes a limit set on how many hit points/hearts a player can lose, this value is actually set depending on the Starting Health Difference. EX: Starting Health Difference - MinimumHeartHave. Set this to less than 0 to disable the feature; Default is -1")
+        @Comment("This value makes a limit set on how many hit points/hearts a player can lose, this value is actually set depending on the Starting Health Difference. EX: Starting Health Difference - MinimumHeartHave. Set this to less than 0 to disable the feature; Default is -1")
         public int MaximumHitPointsPlayerCanLose = -1;
     }
 
