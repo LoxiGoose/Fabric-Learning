@@ -4,7 +4,6 @@ import net.goose.lifesteal.LifeSteal;
 import net.goose.lifesteal.item.custom.HeartCoreItem;
 import net.goose.lifesteal.item.custom.HeartCrystalItem;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 

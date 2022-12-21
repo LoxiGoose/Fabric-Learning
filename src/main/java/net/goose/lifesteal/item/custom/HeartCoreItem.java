@@ -23,7 +23,7 @@ public class HeartCoreItem extends Item {
             if(entity.getHealth() < entity.getMaxHealth()){
 
                 float maxHealth = entity.getMaxHealth();
-                float amountThatWillBeHealed = (float) (maxHealth * 0.25);
+                float amountThatWillBeHealed = (float) (maxHealth * LifeSteal.config.ItemsAndEnchantments.PercentageHeartCoreHeals);
                 float differenceInHealth = entity.getMaxHealth() - entity.getHealth();
                 if(differenceInHealth <= amountThatWillBeHealed){
                     amountThatWillBeHealed = differenceInHealth;

@@ -18,8 +18,6 @@ public class ModConfig implements ConfigData {
     public LifestealRelated LifestealRelated = new LifestealRelated();
     @Comment("This category will hold the maximums for certain values")
     public Maximums Maximums = new Maximums();
-    @Comment("This category holds values that aren't intended for gameplay and aren't polished, but can be used to test certain aspects of the mod easily or just for good fun.")
-    public MISCANDFUN MiscandFun = new MISCANDFUN();
 
     public static class StartingConfig {
         @Comment("This value modifies how many hearts you'll start at in a world. 2 would mean 1 extra heart, -2 would mean 1 less heart. If you have lives enabled, you'll gain a life when you get max hearts double your starting hearts. EX: If 3 hearts is your starting value, you'll gain a life if you get 3 more hearts. The range must be above -19; The default is 0")
@@ -59,11 +57,6 @@ public class ModConfig implements ConfigData {
         public int MaximumHitPointsPlayerCanGet = -1;
         @Comment("This value makes a limit set on how many hit points/hearts a player can lose, this value is actually set depending on the Starting Health Difference. EX: Starting Health Difference - MinimumHeartHave. Set this to less than 0 to disable the feature; Default is -1")
         public int MaximumHitPointsPlayerCanLose = -1;
-    }
-
-    public static class MISCANDFUN{
-        @Comment("When this is false, you can only gain hearts from killing players. Otherwise, any mob will give you hearts; Default is false")
-        public boolean KillingAnyMobsGivesYouHearts = false;
     }
 
     public static void register(){
