@@ -39,9 +39,4 @@
 		// This value makes a limit set on how many hit points/hearts a player can lose, this value is actually set depending on the Starting Health Difference. EX: Starting Health Difference - MinimumHeartHave. Set this to less than 0 to disable the feature; Default is -1
 		"MaximumHitPointsPlayerCanLose": -1
 	},
-	// This category holds values that aren't intended for gameplay and aren't polished, but can be used to test certain aspects of the mod easily or just for good fun.
-	"MiscandFun": {
-		// When this is false, you can only gain hearts from killing players. Otherwise, any mob will give you hearts; Default is false
-		"KillingAnyMobsGivesYouHearts": false
-	}
 }
