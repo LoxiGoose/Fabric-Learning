@@ -1,6 +1,5 @@
 package net.goose.lifesteal.util;
 
-import blue.endless.jankson.annotation.Nullable;
 import com.mojang.authlib.GameProfile;
 import net.goose.lifesteal.LifeSteal;
 import net.goose.lifesteal.advancement.ModCriteria;
@@ -24,18 +23,15 @@ public class HealthData {
         return nbt.getInt("heartdifference");
     }
     public static void setData(IEntityDataSaver player, int hearts) {
-
         NbtCompound nbt = player.getPersistentData();
-        int heartDifference;
 
-        heartDifference = hearts;
-
-        nbt.putInt("heartdifference", heartDifference);
+        nbt.putInt("heartdifference", hearts);
     }
-    public static int maximumheartsGainable = LifeSteal.config.Maximums.MaximumHitPointsPlayerCanGet;
-    public static int maximumheartsLoseable = LifeSteal.config.Maximums.MaximumHitPointsPlayerCanLose;
-    public static int startingHitPointDifference = LifeSteal.config.StartingConfigurations.StartingHitPointDifference;
     public static void refreshHearts(IEntityDataSaver player, LivingEntity livingEntity){
+        final int maximumheartsGainable = LifeSteal.config.maximumamountofheartsGainable.get();
+        final int maximumheartsLoseable = LifeSteal.config.maximumamountofheartsLoseable.get();
+        final int startingHitPointDifference = LifeSteal.config.startingHeartDifference.get();
+
         NbtCompound nbt = player.getPersistentData();
         int heartDifference = nbt.getInt("heartdifference");
 
@@ -46,13 +42,17 @@ public class HealthData {
             if(heartDifference - startingHitPointDifference >= maximumheartsGainable ) {
                 heartDifference = maximumheartsGainable + startingHitPointDifference;
 
-                livingEntity.sendMessage(Text.translatable("You have reached max hearts."));
+                if(LifeSteal.config.tellPlayersIfReachedMaxHearts.get()){
+                    livingEntity.sendMessage(Text.translatable("chat.message.lifesteal.reached_max_hearts"));
+                }
+                HealthData.setData(player, heartDifference);
             }
         }
 
         if(maximumheartsLoseable >= 0){
             if(heartDifference < startingHitPointDifference - maximumheartsLoseable){
                 heartDifference = startingHitPointDifference - maximumheartsLoseable;
+                HealthData.setData(player, heartDifference);
             }
         }
 
@@ -92,14 +92,14 @@ public class HealthData {
         }
 
         if(livingEntity.getMaxHealth() <= 1 && heartDifference <= -20){
-            setData(player, LifeSteal.config.StartingConfigurations.StartingHitPointDifference);
+            setData(player, startingHitPointDifference);
             refreshHearts(player, livingEntity);
 
             if (livingEntity instanceof ServerPlayerEntity serverPlayer) {
 
-                if (LifeSteal.config.StartingConfigurations.BannedUponLosingAllHearts) {
+                if (LifeSteal.config.bannedUponLosingAllHearts.get()) {
 
-                    @Nullable Text text = Text.translatable("You have lost all your lives and max hearts, you are now permanently banned till further notice.");
+                    Text text = Text.translatable("bannedmessage.lifesteal.lost_max_hearts");
 
                     BannedPlayerList userbanlist = serverPlayer.getServer().getPlayerManager().getUserBanList();
                     serverPlayer.getGameProfile();
@@ -108,11 +108,11 @@ public class HealthData {
                     userbanlist.add(userbanlistentry);
 
                     if (serverPlayer != null) {
-                        serverPlayer.networkHandler.disconnect(Text.translatable("You have lost all your max hearts, you are now permanently banned till further notice."));
+                        serverPlayer.networkHandler.disconnect(Text.translatable("bannedmessage.lifesteal.lost_max_hearts"));
                     }
                 } else if (!serverPlayer.isSpectator()) {
                     serverPlayer.changeGameMode(GameMode.SPECTATOR);
-                    livingEntity.sendMessage(Text.translatable("You have lost all your max hearts. You are now permanently dead."));
+                    livingEntity.sendMessage(Text.translatable("chat.message.lifesteal.lost_max_hearts"));
                 }
             }
         }

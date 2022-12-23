@@ -18,7 +18,7 @@ public abstract class ModEntityDataSaverMixin implements IEntityDataSaver {
     public NbtCompound getPersistentData() {
         if(this.persistentData == null) {
             this.persistentData = new NbtCompound();
-            persistentData.putInt("heartdifference", LifeSteal.config.StartingConfigurations.StartingHitPointDifference);
+            persistentData.putInt("heartdifference", LifeSteal.config.startingHeartDifference.get());
         }
         return persistentData;
     }

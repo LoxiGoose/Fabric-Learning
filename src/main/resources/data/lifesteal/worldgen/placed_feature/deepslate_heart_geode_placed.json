@@ -1,9 +1,9 @@
 {
-  "feature": "lifesteal:heart_geode",
+  "feature": "lifesteal:deepslate_heart_geode",
   "placement": [
     {
       "type": "minecraft:rarity_filter",
-      "chance": 35
+      "chance": 50
     },
     {
       "type": "minecraft:in_square"
@@ -13,10 +13,10 @@
       "height": {
         "type": "minecraft:uniform",
         "max_inclusive": {
-          "absolute": 50
+          "absolute": 0
         },
         "min_inclusive": {
-          "above_bottom": 6
+          "absolute": -45
         }
       }
     },

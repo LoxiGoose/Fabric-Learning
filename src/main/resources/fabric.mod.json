@@ -4,13 +4,15 @@
   "version": "${version}",
 
   "name": "Lifesteal",
-  "description": "A mod where killing other players steals their hearts. This is a forge interpretation of the Lifesteal SMP.",
+  "description": "Lifesteal is a Minecraft mod inspired by the original Lifesteal SMP plugin where killing other players steals their hearts for your own gain.",
   "authors": [
-    "LoxiGoose"
+    "LoxiGoose",
+    "bredtxt",
+    "Zophoro"
   ],
   "contact": {
-    "homepage": "https://www.curseforge.com/minecraft/mc-mods/lifesteal-forge",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/lifesteal-loxifabric",
+    "sources": "https://github.com/LoxiGoose/Lifesteal-Fabric"
   },
 
   "license": "GNU GENERAL PUBLIC LICENSE",
@@ -21,19 +23,19 @@
     "main": [
       "net.goose.lifesteal.LifeSteal"
     ],
-    "client": [
-      "net.goose.lifesteal.LifeStealClient"
-    ]
+    "client": []
   },
   "mixins": [
     "lifesteal.mixins.json"
   ],
 
   "depends": {
-    "fabricloader": ">=0.14.11",
+    "fabricloader": ">=0.14.12",
     "fabric-api": "*",
     "minecraft": "~1.19.3",
-    "java": ">=17"
+    "java": ">=17",
+    "com_electronwill_night-config_core": "*",
+    "com_electronwill_night-config_toml": "*"
   },
   "suggests": {
     "another-mod": "*"

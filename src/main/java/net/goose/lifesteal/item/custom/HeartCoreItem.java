@@ -20,36 +20,33 @@ public class HeartCoreItem extends Item {
     @Override
     public ItemStack finishUsing(ItemStack itemStack, World world, LivingEntity entity){
         if(!world.isClient() && entity instanceof ServerPlayerEntity serverPlayer){
-            if(entity.getHealth() < entity.getMaxHealth()){
+            if(!LifeSteal.config.disableHeartCores.get()){
+                if(entity.getHealth() < entity.getMaxHealth() || !LifeSteal.config.preventFromUsingCoreIfMax.get()){
+                    float maxHealth = entity.getMaxHealth();
+                    float amountThatWillBeHealed = (float) (maxHealth * LifeSteal.config.HeartCoreHeal.get());
+                    float differenceInHealth = entity.getMaxHealth() - entity.getHealth();
+                    if(differenceInHealth <= amountThatWillBeHealed){
+                        amountThatWillBeHealed = differenceInHealth;
+                    }
 
-                float maxHealth = entity.getMaxHealth();
-                float amountThatWillBeHealed = (float) (maxHealth * 0.25);
-                float differenceInHealth = entity.getMaxHealth() - entity.getHealth();
-                if(differenceInHealth <= amountThatWillBeHealed){
-                    amountThatWillBeHealed = differenceInHealth;
-                }
+                    int oldDuration = 0;
+                    if(entity.hasStatusEffect(StatusEffects.REGENERATION)){
+                        StatusEffectInstance mobEffect = entity.getStatusEffect(StatusEffects.REGENERATION);
 
-                int oldDuration = 0;
-                if(entity.hasStatusEffect(StatusEffects.REGENERATION)){
-                    StatusEffectInstance mobEffect = entity.getStatusEffect(StatusEffects.REGENERATION);
+                        oldDuration = mobEffect.getDuration();
+                    }
 
-                    oldDuration = mobEffect.getDuration();
-                }
-
-                int tickTime = (int) ((amountThatWillBeHealed * 50) / 2) + oldDuration;
-                entity.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, tickTime, 1));
-            }else{
-
-                if(LifeSteal.config.ItemsAndEnchantments.DisableHeartCores){
-                    serverPlayer.sendMessageToClient(Text.translatable("Heart Cores have been disabled in the configurations"), true);
-                    itemStack.setCount(itemStack.getCount() + 1);;
-                    serverPlayer.currentScreenHandler.syncState();
+                    int tickTime = (int) ((amountThatWillBeHealed * 50) / 2) + oldDuration;
+                    entity.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, tickTime, 1));
                 }else{
-                    serverPlayer.sendMessageToClient(Text.translatable("You are already at max health"), true);
+                    serverPlayer.sendMessageToClient(Text.translatable("gui.lifesteal.heart_core_at_max_health"), true);
                     itemStack.setCount(itemStack.getCount() + 1);
                     serverPlayer.currentScreenHandler.syncState();
                 }
-
+            }else{
+                serverPlayer.sendMessageToClient(Text.translatable("gui.lifesteal.heart_core_disabled"), true);
+                itemStack.setCount(itemStack.getCount() + 1);;
+                serverPlayer.currentScreenHandler.syncState();
             }
         }
         return super.finishUsing(itemStack, world, entity);
