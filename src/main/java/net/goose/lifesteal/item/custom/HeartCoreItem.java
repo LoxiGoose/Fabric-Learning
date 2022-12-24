@@ -40,12 +40,12 @@ public class HeartCoreItem extends Item {
                     entity.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, tickTime, 1));
                 }else{
                     serverPlayer.sendMessageToClient(Text.translatable("gui.lifesteal.heart_core_at_max_health"), true);
-                    itemStack.setCount(itemStack.getCount() + 1);
+                    itemStack.increment(1);
                     serverPlayer.currentScreenHandler.syncState();
                 }
             }else{
                 serverPlayer.sendMessageToClient(Text.translatable("gui.lifesteal.heart_core_disabled"), true);
-                itemStack.setCount(itemStack.getCount() + 1);;
+                itemStack.increment(1);;
                 serverPlayer.currentScreenHandler.syncState();
             }
         }
