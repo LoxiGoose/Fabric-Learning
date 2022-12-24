@@ -27,10 +27,12 @@ public abstract class LivingMixin{
 
     @Inject(method = "tryUseTotem", at = @At("HEAD"))
     private void totemUsed(final DamageSource source, final CallbackInfoReturnable<Boolean> cir) {
-        if(this instanceof IEntityDataSaver dataSaver){
-            if(dataSaver instanceof ServerPlayerEntity serverPlayer){
-                if(HealthData.retrieveHeartDifference(dataSaver) >= 20){
-                    ModCriteria.USE_TOTEM_WHILE_MAX_20_HEARTS.trigger(serverPlayer);
+        if(!cir.isCancelled()){
+            if(this instanceof IEntityDataSaver dataSaver){
+                if(dataSaver instanceof ServerPlayerEntity serverPlayer){
+                    if(HealthData.retrieveHeartDifference(dataSaver) >= 20){
+                        ModCriteria.USE_TOTEM_WHILE_MAX_20_HEARTS.trigger(serverPlayer);
+                    }
                 }
             }
         }
