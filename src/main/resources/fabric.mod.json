@@ -6,7 +6,9 @@
   "name": "Lifesteal",
   "description": "A mod where killing other players steals their hearts. This is a forge interpretation of the Lifesteal SMP.",
   "authors": [
-    "LoxiGoose"
+    "LoxiGoose",
+    "bredtxt",
+    "Zophoro"
   ],
   "contact": {
     "homepage": "https://www.curseforge.com/minecraft/mc-mods/lifesteal-forge",
@@ -33,7 +35,9 @@
     "fabricloader": ">=0.14.12",
     "fabric-api": "*",
     "minecraft": "~1.19.2",
-    "java": ">=17"
+    "java": ">=17",
+    "com_electronwill_night-config_core": "*",
+    "com_electronwill_night-config_toml": "*"
   },
   "suggests": {
     "another-mod": "*"

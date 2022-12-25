@@ -6,7 +6,8 @@
   "mixins": [
     "ServerPlayerMixin",
     "PlayerMixin",
-    "ModEntityDataSaverMixin"
+    "ModEntityDataSaverMixin",
+    "LivingMixin"
   ],
   "client": [],
   "server": [],

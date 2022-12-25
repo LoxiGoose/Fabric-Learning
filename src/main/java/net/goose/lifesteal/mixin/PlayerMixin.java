@@ -19,8 +19,20 @@ public abstract class PlayerMixin extends LivingEntity {
     protected PlayerMixin(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
     }
+
     @Inject(method = "dropInventory", at = @At("HEAD"))
     private void onDeath(final CallbackInfo info) {
+        
+        final int maximumheartsGainable = LifeSteal.config.maximumamountofheartsGainable.get();
+        final int maximumheartsLoseable = LifeSteal.config.maximumamountofheartsLoseable.get();
+        final int startingHitPointDifference = LifeSteal.config.startingHeartDifference.get();
+        final int amountOfHealthLostUponLossConfig = LifeSteal.config.amountOfHealthLostUponLoss.get();
+        final boolean playersGainHeartsifKillednoHeart = LifeSteal.config.playersGainHeartsifKillednoHeart.get();
+        final boolean disableLifesteal = LifeSteal.config.disableLifesteal.get();
+        final boolean disableHeartLoss = LifeSteal.config.disableHeartLoss.get();
+        final boolean loseHeartsOnlyWhenKilledByMob = LifeSteal.config.loseHeartsOnlyWhenKilledByMob.get();
+        final boolean loseHeartsOnlyWhenKilledByPlayer = LifeSteal.config.loseHeartsOnlyWhenKilledByPlayer.get();
+
         LivingEntity killedEntity = this;
 
         if(killedEntity instanceof ServerPlayerEntity) {
@@ -31,35 +43,37 @@ public abstract class PlayerMixin extends LivingEntity {
 
                 int amountOfHealthLostUponLoss;
 
-                if(LifeSteal.config.Maximums.MaximumHitPointsPlayerCanLose < 0 ){
-                    if(20 + HeartDifference - LifeSteal.config.StartingConfigurations.AmountOfHitPointsGivenorTaken >= 0 || LifeSteal.config.LifestealRelated.PlayersGainHeartsFromNoHeartPlayers){
-                        amountOfHealthLostUponLoss = LifeSteal.config.StartingConfigurations.AmountOfHitPointsGivenorTaken;
+                if(maximumheartsLoseable < 0 ){
+                    if(20 + HeartDifference - amountOfHealthLostUponLossConfig >= 0 || playersGainHeartsifKillednoHeart){
+                        amountOfHealthLostUponLoss = amountOfHealthLostUponLossConfig;
                     }else{
                         amountOfHealthLostUponLoss = 20 + HeartDifference;
                     }
                 }else {
-                    if (20 + HeartDifference - LifeSteal.config.StartingConfigurations.AmountOfHitPointsGivenorTaken >= (20 + LifeSteal.config.StartingConfigurations.StartingHitPointDifference) - LifeSteal.config.Maximums.MaximumHitPointsPlayerCanLose || LifeSteal.config.LifestealRelated.PlayersGainHeartsFromNoHeartPlayers) {
-                        amountOfHealthLostUponLoss = LifeSteal.config.StartingConfigurations.AmountOfHitPointsGivenorTaken;
+                    if (20 + HeartDifference - amountOfHealthLostUponLossConfig >= (20 + startingHitPointDifference) - maximumheartsLoseable || playersGainHeartsifKillednoHeart) {
+                        amountOfHealthLostUponLoss = amountOfHealthLostUponLossConfig;
                     } else {
-                        amountOfHealthLostUponLoss = HeartDifference + LifeSteal.config.Maximums.MaximumHitPointsPlayerCanLose;
+                        amountOfHealthLostUponLoss = HeartDifference + maximumheartsLoseable;
                     }
                 }
 
                 if (killerEntity != null) {
                     if(killerEntity != killedEntity){
-                        if (killerEntity instanceof ServerPlayerEntity serverPlayer && !LifeSteal.config.LifestealRelated.DisableLifesteal) {
-                            if (LifeSteal.config.LifestealRelated.PlayersGainHeartsFromNoHeartPlayers) {
+                        if (killerEntity instanceof ServerPlayerEntity serverPlayer && !disableLifesteal) {
+
+                            if (playersGainHeartsifKillednoHeart) {
                                 HealthData.setData((IEntityDataSaver) killerEntity, HealthData.retrieveHeartDifference((IEntityDataSaver) killerEntity) + amountOfHealthLostUponLoss);
                                 HealthData.refreshHearts((IEntityDataSaver) killerEntity, killerEntity);
+
                             } else {
 
-                                if (!LifeSteal.config.StartingConfigurations.DisableHeartLoss) {
-                                    if (LifeSteal.config.Maximums.MaximumHitPointsPlayerCanLose > -1) {
-                                        if (LifeSteal.config.StartingConfigurations.StartingHitPointDifference + HeartDifference > -LifeSteal.config.Maximums.MaximumHitPointsPlayerCanLose) {
+                                if (!disableHeartLoss) {
+                                    if (maximumheartsLoseable > -1) {
+                                        if (startingHitPointDifference + HeartDifference > -maximumheartsLoseable) {
                                             HealthData.setData((IEntityDataSaver) killerEntity, HealthData.retrieveHeartDifference((IEntityDataSaver) killerEntity) + amountOfHealthLostUponLoss);
                                             HealthData.refreshHearts((IEntityDataSaver) killerEntity, killerEntity);
                                         } else {
-                                            serverPlayer.sendMessage(Text.translatable("This player doesn't have any hearts you can steal."));
+                                            serverPlayer.sendMessage(Text.translatable("chat.message.lifesteal.no_more_hearts_to_steal"));
                                         }
 
                                     } else {
@@ -74,8 +88,8 @@ public abstract class PlayerMixin extends LivingEntity {
 
                         }
 
-                        if(!LifeSteal.config.LifestealRelated.DisableLifesteal){
-                            if(!LifeSteal.config.StartingConfigurations.LoseHeartsOnlyWhenKilledByMob && LifeSteal.config.StartingConfigurations.LoseHeartsOnlyWhenKilledByPlayer){
+                        if(!disableLifesteal){
+                            if(!loseHeartsOnlyWhenKilledByMob && loseHeartsOnlyWhenKilledByPlayer){
                                 if(killerEntity instanceof PlayerEntity){
                                     HealthData.setData((IEntityDataSaver) killedEntity, HealthData.retrieveHeartDifference((IEntityDataSaver) killedEntity) - amountOfHealthLostUponLoss);
                                     HealthData.refreshHearts((IEntityDataSaver) killedEntity, killedEntity);
@@ -90,7 +104,7 @@ public abstract class PlayerMixin extends LivingEntity {
                         HealthData.refreshHearts((IEntityDataSaver) killedEntity, killedEntity);
                     }
                 }else{
-                    if (!LifeSteal.config.StartingConfigurations.LoseHeartsOnlyWhenKilledByMob && !LifeSteal.config.StartingConfigurations.LoseHeartsOnlyWhenKilledByPlayer) {
+                    if (!loseHeartsOnlyWhenKilledByMob && !loseHeartsOnlyWhenKilledByPlayer) {
                         HealthData.setData((IEntityDataSaver) killedEntity, HealthData.retrieveHeartDifference((IEntityDataSaver) killedEntity) - amountOfHealthLostUponLoss);
                         HealthData.refreshHearts((IEntityDataSaver) killedEntity, killedEntity);
                     }

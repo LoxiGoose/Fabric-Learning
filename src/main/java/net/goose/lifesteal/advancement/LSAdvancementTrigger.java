@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import net.goose.lifesteal.LifeSteal;
 import net.minecraft.advancement.criterion.AbstractCriterion;
 import net.minecraft.advancement.criterion.AbstractCriterionConditions;
+import net.minecraft.advancement.criterion.ConstructBeaconCriterion;
 import net.minecraft.block.Block;
 import net.minecraft.predicate.NumberRange;
 import net.minecraft.predicate.entity.AdvancementEntityPredicateDeserializer;
@@ -14,16 +15,18 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 
 public class LSAdvancementTrigger extends AbstractCriterion<LSAdvancementTrigger.Conditions> {
-    static final Identifier ID = new Identifier(LifeSteal.MOD_ID, "get_10_max_hearts");
+    public final Identifier ID;
 
+    public LSAdvancementTrigger(Identifier identifier){
+        this.ID = identifier;
+    }
     @Override
     public Identifier getId() {
         return ID;
     }
 
-    @Override
     public Conditions conditionsFromJson(JsonObject jsonObject, EntityPredicate.Extended extended, AdvancementEntityPredicateDeserializer advancementEntityPredicateDeserializer) {
-        return new Conditions(extended);
+        return new Conditions(extended, ID);
     }
 
     public void trigger(ServerPlayerEntity player) {
@@ -32,15 +35,14 @@ public class LSAdvancementTrigger extends AbstractCriterion<LSAdvancementTrigger
 
     public static class Conditions extends AbstractCriterionConditions {
 
-        public Conditions(EntityPredicate.Extended player) {
+        public Conditions(EntityPredicate.Extended player, Identifier ID) {
             super(ID, player);
         }
 
-        public static Conditions create(Block block, ItemPredicate.Builder itemPredicateBuilder, NumberRange.IntRange beeCountRange) {
-            return new Conditions(EntityPredicate.Extended.EMPTY);
+        public static ConstructBeaconCriterion.Conditions create(Block block, ItemPredicate.Builder itemPredicateBuilder, NumberRange.IntRange beeCountRange) {
+            return new ConstructBeaconCriterion.Conditions(EntityPredicate.Extended.EMPTY, beeCountRange);
         }
 
-        @Override
         public JsonObject toJson(AdvancementEntityPredicateSerializer predicateSerializer) {
             JsonObject jsonObject = super.toJson(predicateSerializer);
             return jsonObject;
