@@ -2,6 +2,8 @@ package net.goose.lifesteal.event;
 
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.goose.lifesteal.LifeSteal;
+import net.goose.lifesteal.util.HealthData;
+import net.goose.lifesteal.util.IEntityDataSaver;
 import net.minecraft.server.network.ServerPlayerEntity;
 
 public class ModEvents {
