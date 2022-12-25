@@ -16,6 +16,7 @@ public abstract class ServerPlayerMixin extends LivingEntity {
     protected ServerPlayerMixin(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
     }
+
     @Inject(method = "onSpawn", at = @At("HEAD"))
     private void onSpawn(final CallbackInfo info) {
         HealthData.refreshHearts((IEntityDataSaver) this, this);

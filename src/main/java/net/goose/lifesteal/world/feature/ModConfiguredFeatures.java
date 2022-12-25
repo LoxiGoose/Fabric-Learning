@@ -23,7 +23,7 @@ public class ModConfiguredFeatures {
             ConfiguredFeatures.register("heart_ore", Feature.SCATTERED_ORE, new OreFeatureConfig(OVERWORLD_HEART_ORES, 12));
 
     public static final RegistryEntry<ConfiguredFeature<OreFeatureConfig, ?>> NETHER_HEART_ORE =
-            ConfiguredFeatures.register("nether_heart_ore",Feature.SCATTERED_ORE, new OreFeatureConfig(NETHER_HEART_ORES, 14));
+            ConfiguredFeatures.register("nether_heart_ore", Feature.SCATTERED_ORE, new OreFeatureConfig(NETHER_HEART_ORES, 14));
     public static final RegistryEntry<ConfiguredFeature<GeodeFeatureConfig, ?>> DEEPSLATE_HEART_GEODE =
             ConfiguredFeatures.register("deepslate_heart_geode", Feature.GEODE,
                     new GeodeFeatureConfig(new GeodeLayerConfig(
@@ -33,7 +33,7 @@ public class ModConfiguredFeatures {
                             BlockStateProvider.of(Blocks.DIRT),
                             BlockStateProvider.of(Blocks.SMOOTH_BASALT),
                             List.of(Blocks.CALCITE.getDefaultState()),
-                            BlockTags.FEATURES_CANNOT_REPLACE , BlockTags.GEODE_INVALID_BLOCKS),
+                            BlockTags.FEATURES_CANNOT_REPLACE, BlockTags.GEODE_INVALID_BLOCKS),
                             new GeodeLayerThicknessConfig(1.7D, 2.2D, 3.2D, 4.2D),
                             new GeodeCrackConfig(0.95D, 2.0D, 2),
                             0.35D, 0.083D,
@@ -49,7 +49,7 @@ public class ModConfiguredFeatures {
                             BlockStateProvider.of(Blocks.MAGMA_BLOCK),
                             BlockStateProvider.of(Blocks.BLACKSTONE),
                             List.of(Blocks.NETHER_GOLD_ORE.getDefaultState(), Blocks.SOUL_SAND.getDefaultState(), Blocks.GRAVEL.getDefaultState()),
-                            BlockTags.FEATURES_CANNOT_REPLACE , BlockTags.GEODE_INVALID_BLOCKS),
+                            BlockTags.FEATURES_CANNOT_REPLACE, BlockTags.GEODE_INVALID_BLOCKS),
                             new GeodeLayerThicknessConfig(1.7D, 2.2D, 3.2D, 4.2D),
                             new GeodeCrackConfig(0.95D, 2.0D, 2),
                             0.35D, 0.083D,

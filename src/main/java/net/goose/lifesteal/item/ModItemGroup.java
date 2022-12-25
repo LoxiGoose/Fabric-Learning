@@ -8,5 +8,5 @@ import net.minecraft.util.Identifier;
 
 public class ModItemGroup {
     public static final ItemGroup LIFESTEAL = FabricItemGroupBuilder.build(new Identifier(LifeSteal.MOD_ID),
-            ()-> new ItemStack(ModItems.HEART_CRYSTAL));
+            () -> new ItemStack(ModItems.HEART_CRYSTAL));
 }

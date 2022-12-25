@@ -5,13 +5,14 @@ import net.goose.lifesteal.LifeSteal;
 import net.minecraft.server.network.ServerPlayerEntity;
 
 public class ModEvents {
-    public static void COPY_FROM(ServerPlayerEntity oldPlayer,ServerPlayerEntity newPlayer, boolean alive){
+    public static void COPY_FROM(ServerPlayerEntity oldPlayer, ServerPlayerEntity newPlayer, boolean alive) {
         HealthData.setData((IEntityDataSaver) newPlayer, HealthData.retrieveHeartDifference((IEntityDataSaver) oldPlayer));
         HealthData.refreshHearts((IEntityDataSaver) newPlayer, newPlayer);
         newPlayer.heal(newPlayer.getMaxHealth());
     }
-    public static void register(){
-        LifeSteal.LOGGER.debug("Registering ModEvents for "+LifeSteal.MOD_ID);
+
+    public static void register() {
+        LifeSteal.LOGGER.debug("Registering ModEvents for " + LifeSteal.MOD_ID);
         ServerPlayerEvents.COPY_FROM.register(((oldPlayer, newPlayer, alive) -> COPY_FROM(oldPlayer, newPlayer, alive)));
     }
 }

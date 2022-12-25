@@ -14,30 +14,31 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.world.World;
 
-public class HeartCrystalItem extends Item{
+public class HeartCrystalItem extends Item {
     public static final FoodComponent HeartCrystal = (new FoodComponent.Builder()).alwaysEdible().build();
 
-    public HeartCrystalItem(Settings settings){
+    public HeartCrystalItem(Settings settings) {
         super(settings);
     }
 
-    public void applyCrystalEffect(LivingEntity entity){
+    public void applyCrystalEffect(LivingEntity entity) {
         // Formula, for every hit point, increase duration of the regeneration by 50 ticks: TickDuration = MaxHealth * 50
         int tickTime = (int) (entity.getMaxHealth() * 50) / 4;
         entity.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, tickTime, 3));
     }
+
     @Override
     public ItemStack finishUsing(ItemStack item, World world, LivingEntity entity) {
 
-        if(!world.isClient() && entity instanceof ServerPlayerEntity serverPlayer){
+        if (!world.isClient() && entity instanceof ServerPlayerEntity serverPlayer) {
 
-            if(!LifeSteal.config.disableHeartCrystals.get()){
+            if (!LifeSteal.config.disableHeartCrystals.get()) {
                 IEntityDataSaver dataSaver = (IEntityDataSaver) serverPlayer;
                 int currentheartDifference = HealthData.retrieveHeartDifference(dataSaver);
 
-                if(LifeSteal.config.maximumamountofheartsGainable.get() > -1 && LifeSteal.config.preventFromUsingCrystalIfMax.get()){
+                if (LifeSteal.config.maximumamountofheartsGainable.get() > -1 && LifeSteal.config.preventFromUsingCrystalIfMax.get()) {
                     int maximumheartDifference = LifeSteal.config.startingHeartDifference.get() + LifeSteal.config.maximumamountofheartsGainable.get();
-                    if(currentheartDifference == maximumheartDifference){
+                    if (currentheartDifference == maximumheartDifference) {
                         serverPlayer.sendMessageToClient(Text.translatable("gui.lifesteal.heart_crystal_reaching_max"), true);
                         item.setCount(item.getCount() + 1);
                         serverPlayer.currentScreenHandler.syncState();
@@ -52,18 +53,18 @@ public class HeartCrystalItem extends Item{
 
                 // Formula, for every hit point, increase duration of the regeneration by 50 ticks: TickDuration = MaxHealth * 50
                 NbtCompound nbt = item.getNbt();
-                if(nbt != null){
+                if (nbt != null) {
                     NbtCompound compound = nbt.getCompound("lifesteal");
-                    if(compound == null){
+                    if (compound == null) {
                         applyCrystalEffect(entity);
-                    }else if(compound.getBoolean("Fresh")){
+                    } else if (compound.getBoolean("Fresh")) {
                         applyCrystalEffect(entity);
                     }
-                }else{
+                } else {
                     applyCrystalEffect(entity);
                 }
 
-            }else{
+            } else {
                 serverPlayer.sendMessageToClient(Text.translatable("gui.lifesteal.heart_crystal_disabled"), true);
                 item.increment(1);
                 serverPlayer.currentScreenHandler.syncState();

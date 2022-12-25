@@ -16,7 +16,7 @@ public abstract class ModEntityDataSaverMixin implements IEntityDataSaver {
 
     @Override
     public NbtCompound getPersistentData() {
-        if(this.persistentData == null) {
+        if (this.persistentData == null) {
             this.persistentData = new NbtCompound();
             persistentData.putInt("heartdifference", LifeSteal.config.startingHeartDifference.get());
         }
@@ -25,7 +25,7 @@ public abstract class ModEntityDataSaverMixin implements IEntityDataSaver {
 
     @Inject(method = "writeNbt", at = @At("HEAD"))
     protected void injectWriteMethod(NbtCompound nbt, CallbackInfoReturnable info) {
-        if(persistentData != null) {
+        if (persistentData != null) {
             nbt.put("lifesteal.lifestealdata", persistentData);
         }
     }

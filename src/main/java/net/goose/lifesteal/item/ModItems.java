@@ -15,10 +15,11 @@ public class ModItems {
     public static final Item HEART_CRYSTAL = registerItem("heart_crystal",
             new HeartCrystalItem(new Item.Settings().maxCount(1).fireproof().food(HeartCrystalItem.HeartCrystal).group(ModItemGroup.LIFESTEAL)));
 
-    public static Item registerItem(String name, Item item){
+    public static Item registerItem(String name, Item item) {
         return Registry.register(Registry.ITEM, new Identifier(LifeSteal.MOD_ID, name), item);
     }
-    public static void register(){
-        LifeSteal.LOGGER.debug("Registering ModItems for "+ LifeSteal.MOD_ID);
+
+    public static void register() {
+        LifeSteal.LOGGER.debug("Registering ModItems for " + LifeSteal.MOD_ID);
     }
 }

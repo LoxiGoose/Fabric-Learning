@@ -18,16 +18,18 @@ import java.util.Iterator;
 import java.util.Set;
 
 public class HealthData {
-    public static int retrieveHeartDifference(IEntityDataSaver player){
+    public static int retrieveHeartDifference(IEntityDataSaver player) {
         NbtCompound nbt = player.getPersistentData();
         return nbt.getInt("heartdifference");
     }
+
     public static void setData(IEntityDataSaver player, int hearts) {
         NbtCompound nbt = player.getPersistentData();
 
         nbt.putInt("heartdifference", hearts);
     }
-    public static void refreshHearts(IEntityDataSaver player, LivingEntity livingEntity){
+
+    public static void refreshHearts(IEntityDataSaver player, LivingEntity livingEntity) {
         final int maximumheartsGainable = LifeSteal.config.maximumamountofheartsGainable.get();
         final int maximumheartsLoseable = LifeSteal.config.maximumamountofheartsLoseable.get();
         final int startingHitPointDifference = LifeSteal.config.startingHeartDifference.get();
@@ -38,25 +40,25 @@ public class HealthData {
         EntityAttributeInstance attributeInstance = livingEntity.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH);
         Set<EntityAttributeModifier> attributeModifiers = attributeInstance.getModifiers();
 
-        if(maximumheartsGainable > 0){
-            if(heartDifference - startingHitPointDifference >= maximumheartsGainable ) {
+        if (maximumheartsGainable > 0) {
+            if (heartDifference - startingHitPointDifference >= maximumheartsGainable) {
                 heartDifference = maximumheartsGainable + startingHitPointDifference;
 
-                if(LifeSteal.config.tellPlayersIfReachedMaxHearts.get()){
+                if (LifeSteal.config.tellPlayersIfReachedMaxHearts.get()) {
                     livingEntity.sendMessage(Text.translatable("chat.message.lifesteal.reached_max_hearts"));
                 }
                 HealthData.setData(player, heartDifference);
             }
         }
 
-        if(maximumheartsLoseable >= 0){
-            if(heartDifference < startingHitPointDifference - maximumheartsLoseable){
+        if (maximumheartsLoseable >= 0) {
+            if (heartDifference < startingHitPointDifference - maximumheartsLoseable) {
                 heartDifference = startingHitPointDifference - maximumheartsLoseable;
                 HealthData.setData(player, heartDifference);
             }
         }
 
-        if(!attributeModifiers.isEmpty()){
+        if (!attributeModifiers.isEmpty()) {
 
             Iterator<EntityAttributeModifier> attributeModifierIterator = attributeModifiers.iterator();
 
@@ -74,24 +76,24 @@ public class HealthData {
                 }
             }
 
-            if(!FoundAttribute){
+            if (!FoundAttribute) {
                 EntityAttributeModifier attributeModifier = new EntityAttributeModifier("LifeStealHealthModifier", heartDifference, EntityAttributeModifier.Operation.ADDITION);
                 attributeInstance.addPersistentModifier(attributeModifier);
             }
-        }else{
+        } else {
             EntityAttributeModifier attributeModifier = new EntityAttributeModifier("LifeStealHealthModifier", heartDifference, EntityAttributeModifier.Operation.ADDITION);
             attributeInstance.addPersistentModifier(attributeModifier);
         }
 
-        if(heartDifference >= 20 && livingEntity instanceof ServerPlayerEntity serverPlayer){
+        if (heartDifference >= 20 && livingEntity instanceof ServerPlayerEntity serverPlayer) {
             ModCriteria.GET_10_MAX_HEARTS.trigger(serverPlayer);
         }
 
-        if(livingEntity.getHealth() > livingEntity.getMaxHealth()){
+        if (livingEntity.getHealth() > livingEntity.getMaxHealth()) {
             livingEntity.setHealth(livingEntity.getMaxHealth());
         }
 
-        if(livingEntity.getMaxHealth() <= 1 && heartDifference <= -20){
+        if (livingEntity.getMaxHealth() <= 1 && heartDifference <= -20) {
             setData(player, startingHitPointDifference);
             refreshHearts(player, livingEntity);
 

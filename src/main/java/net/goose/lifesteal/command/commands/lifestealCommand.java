@@ -21,7 +21,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 public class lifestealCommand {
-    public static void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess commandRegistryAccess, CommandManager.RegistrationEnvironment registrationEnvironment){
+    public static void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess commandRegistryAccess, CommandManager.RegistrationEnvironment registrationEnvironment) {
         dispatcher.register(
                 CommandManager.literal("ls")
                         .then(CommandManager.literal("withdraw")
@@ -44,24 +44,24 @@ public class lifestealCommand {
                                                 .executes((command) -> setHitPoint(command.getSource(), EntityArgumentType.getEntity(command, "Player"), IntegerArgumentType.getInteger(command, "Amount")))))));
     }
 
-    public static int withdraw(ServerCommandSource source, int amount) throws CommandSyntaxException{
-        if(source.isExecutedByPlayer()){
+    public static int withdraw(ServerCommandSource source, int amount) throws CommandSyntaxException {
+        if (source.isExecutedByPlayer()) {
             final int maximumheartsLoseable = LifeSteal.config.maximumamountofheartsLoseable.get();
             final int startingHitPointDifference = LifeSteal.config.startingHeartDifference.get();
 
             LivingEntity playerthatsentcommand = source.getPlayer();
-            if(playerthatsentcommand instanceof ServerPlayerEntity player){
+            if (playerthatsentcommand instanceof ServerPlayerEntity player) {
                 String advancementUsed = (String) LifeSteal.config.advancementUsedForWithdrawing.get();
 
-                if(source.getPlayer().getAdvancementTracker().getProgress(Advancement.Builder.create().build(new Identifier(advancementUsed))).isDone() || advancementUsed.isEmpty()){
+                if (source.getPlayer().getAdvancementTracker().getProgress(Advancement.Builder.create().build(new Identifier(advancementUsed))).isDone() || advancementUsed.isEmpty()) {
                     int heartDifference = HealthData.retrieveHeartDifference((IEntityDataSaver) player) - (LifeSteal.config.HeartCrystalAmountGain.get() * amount);
-                    if(maximumheartsLoseable >= 0){
-                        if(heartDifference < startingHitPointDifference - maximumheartsLoseable){
+                    if (maximumheartsLoseable >= 0) {
+                        if (heartDifference < startingHitPointDifference - maximumheartsLoseable) {
                             player.sendMessageToClient(Text.translatable("gui.lifesteal.can't_withdraw_less_than_minimum"), true);
                             return 1;
                         }
                     }
-                    HealthData.setData((IEntityDataSaver) player,heartDifference);
+                    HealthData.setData((IEntityDataSaver) player, heartDifference);
                     HealthData.refreshHearts((IEntityDataSaver) player, playerthatsentcommand);
 
                     ItemStack heartCrystal = new ItemStack(ModItems.HEART_CRYSTAL, amount);
@@ -69,9 +69,9 @@ public class lifestealCommand {
                     compoundTag.putBoolean("Fresh", false);
                     heartCrystal.setCustomName(Text.translatable("item.lifesteal.heart_crystal.unnatural"));
                     player.getInventory().insertStack(heartCrystal);
-                }else{
+                } else {
                     String text = (String) LifeSteal.config.textUsedForRequirementOnWithdrawing.get();
-                    if(!text.isEmpty()){
+                    if (!text.isEmpty()) {
                         player.sendMessageToClient(Text.literal((String) LifeSteal.config.textUsedForRequirementOnWithdrawing.get()), true);
                     }
                 }
@@ -79,45 +79,49 @@ public class lifestealCommand {
         }
         return 1;
     }
+
     public static int getHitPoint(ServerCommandSource source, Entity chosenentity) throws CommandSyntaxException {
         LivingEntity playerthatsentcommand = source.getPlayer();
-        if(!source.isExecutedByPlayer()){
-            LifeSteal.LOGGER.info(chosenentity.getName().getString() +"'s HitPoint difference is "+ HealthData.retrieveHeartDifference((IEntityDataSaver) chosenentity) + ".");
-        }else{
-            playerthatsentcommand.sendMessage(Text.translatable(chosenentity.getName().getString() +"'s HitPoint difference is "+ HealthData.retrieveHeartDifference((IEntityDataSaver) chosenentity) + "."));
+        if (!source.isExecutedByPlayer()) {
+            LifeSteal.LOGGER.info(chosenentity.getName().getString() + "'s HitPoint difference is " + HealthData.retrieveHeartDifference((IEntityDataSaver) chosenentity) + ".");
+        } else {
+            playerthatsentcommand.sendMessage(Text.translatable(chosenentity.getName().getString() + "'s HitPoint difference is " + HealthData.retrieveHeartDifference((IEntityDataSaver) chosenentity) + "."));
         }
         return 1;
     }
+
     public static int getHitPoint(ServerCommandSource source) throws CommandSyntaxException {
-        if(source.isExecutedByPlayer()){
+        if (source.isExecutedByPlayer()) {
             LivingEntity playerthatsentcommand = source.getPlayer();
-            playerthatsentcommand.sendMessage(Text.translatable("Your HitPoint difference is "+ HealthData.retrieveHeartDifference((IEntityDataSaver) playerthatsentcommand) + "."));
+            playerthatsentcommand.sendMessage(Text.translatable("Your HitPoint difference is " + HealthData.retrieveHeartDifference((IEntityDataSaver) playerthatsentcommand) + "."));
         }
         return 1;
     }
-    public static int setHitPoint(ServerCommandSource source, int amount) throws CommandSyntaxException{
-        if(source.isExecutedByPlayer()){
+
+    public static int setHitPoint(ServerCommandSource source, int amount) throws CommandSyntaxException {
+        if (source.isExecutedByPlayer()) {
             LivingEntity playerthatsentcommand = source.getPlayer();
 
             HealthData.setData((IEntityDataSaver) playerthatsentcommand, amount);
             HealthData.refreshHearts((IEntityDataSaver) playerthatsentcommand, playerthatsentcommand);
 
-            playerthatsentcommand.sendMessage(Text.translatable("Your HitPoint difference has been set to "+amount));
+            playerthatsentcommand.sendMessage(Text.translatable("Your HitPoint difference has been set to " + amount));
         }
         return 1;
     }
-    public static int setHitPoint(ServerCommandSource source, Entity chosenentity, int amount) throws CommandSyntaxException{
+
+    public static int setHitPoint(ServerCommandSource source, Entity chosenentity, int amount) throws CommandSyntaxException {
         LivingEntity playerthatsentcommand = source.getPlayer();
         HealthData.setData((IEntityDataSaver) chosenentity, amount);
         HealthData.refreshHearts((IEntityDataSaver) chosenentity, (LivingEntity) chosenentity);
-        if(chosenentity != playerthatsentcommand && source.isExecutedByPlayer()){
-            playerthatsentcommand.sendMessage(Text.translatable("Set "+ chosenentity.getName().getString() +"'s HitPoint difference to "+amount));
-        }else if(!source.isExecutedByPlayer()){
-            LifeSteal.LOGGER.info("Set "+ chosenentity.getName().getString() +"'s HitPoint difference to "+amount);
+        if (chosenentity != playerthatsentcommand && source.isExecutedByPlayer()) {
+            playerthatsentcommand.sendMessage(Text.translatable("Set " + chosenentity.getName().getString() + "'s HitPoint difference to " + amount));
+        } else if (!source.isExecutedByPlayer()) {
+            LifeSteal.LOGGER.info("Set " + chosenentity.getName().getString() + "'s HitPoint difference to " + amount);
         }
 
-        if(LifeSteal.config.tellPlayersIfHitPointChanged.get()){
-            chosenentity.sendMessage(Text.translatable("Your HitPoint difference has been set to "+amount));
+        if (LifeSteal.config.tellPlayersIfHitPointChanged.get()) {
+            chosenentity.sendMessage(Text.translatable("Your HitPoint difference has been set to " + amount));
         }
         return 1;
     }
