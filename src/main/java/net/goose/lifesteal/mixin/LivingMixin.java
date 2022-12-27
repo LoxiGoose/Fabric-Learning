@@ -44,7 +44,7 @@ public abstract class LivingMixin{
             LivingEntity entity = this.getAttacker();
             if(entity instanceof ServerPlayerEntity serverPlayer){
                 HealthData.setData((IEntityDataSaver) serverPlayer, HealthData.retrieveHeartDifference((IEntityDataSaver) serverPlayer) + LifeSteal.config.amountOfHealthLostUponLoss.get());
-                HealthData.refreshHearts((IEntityDataSaver) serverPlayer, entity);
+                HealthData.refreshHearts((IEntityDataSaver) serverPlayer, entity, false);
             }
         }
     }

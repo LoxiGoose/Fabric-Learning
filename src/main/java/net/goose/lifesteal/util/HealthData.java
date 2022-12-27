@@ -17,7 +17,7 @@ import net.minecraft.world.GameMode;
 import java.util.Iterator;
 import java.util.Set;
 
-public class HealthData {
+public class HealthData{
     public static int retrieveHeartDifference(IEntityDataSaver player){
         NbtCompound nbt = player.getPersistentData();
         return nbt.getInt("heartdifference");
@@ -27,7 +27,7 @@ public class HealthData {
 
         nbt.putInt("heartdifference", hearts);
     }
-    public static void refreshHearts(IEntityDataSaver player, LivingEntity livingEntity){
+    public static void refreshHearts(IEntityDataSaver player, LivingEntity livingEntity, boolean healtoMax){
         final int maximumheartsGainable = LifeSteal.config.maximumamountofheartsGainable.get();
         final int maximumheartsLoseable = LifeSteal.config.maximumamountofheartsLoseable.get();
         final int startingHitPointDifference = LifeSteal.config.startingHeartDifference.get();
@@ -93,11 +93,11 @@ public class HealthData {
 
         if(livingEntity.getMaxHealth() <= 1 && heartDifference <= -20){
             setData(player, startingHitPointDifference);
-            refreshHearts(player, livingEntity);
+            refreshHearts(player, livingEntity, true);
 
             if (livingEntity instanceof ServerPlayerEntity serverPlayer) {
 
-                if (LifeSteal.config.bannedUponLosingAllHearts.get()) {
+                if (LifeSteal.config.bannedUponLosingAllHearts.get() && !livingEntity.world.getServer().isSingleplayer()) {
 
                     Text text = Text.translatable("bannedmessage.lifesteal.lost_max_hearts");
 

@@ -18,6 +18,6 @@ public abstract class ServerPlayerMixin extends LivingEntity {
     }
     @Inject(method = "onSpawn", at = @At("HEAD"))
     private void onSpawn(final CallbackInfo info) {
-        HealthData.refreshHearts((IEntityDataSaver) this, this);
+        HealthData.refreshHearts((IEntityDataSaver) this, this,false);
     }
 }

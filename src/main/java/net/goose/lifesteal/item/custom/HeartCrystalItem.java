@@ -48,7 +48,7 @@ public class HeartCrystalItem extends Item{
                 int newheartDifference = currentheartDifference + LifeSteal.config.HeartCrystalAmountGain.get();
 
                 HealthData.setData(dataSaver, newheartDifference);
-                HealthData.refreshHearts(dataSaver, entity);
+                HealthData.refreshHearts(dataSaver, entity,false);
 
                 // Formula, for every hit point, increase duration of the regeneration by 50 ticks: TickDuration = MaxHealth * 50
                 NbtCompound nbt = item.getNbt();
