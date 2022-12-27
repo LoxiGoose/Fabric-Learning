@@ -9,7 +9,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 public class ModEvents {
     public static void COPY_FROM(ServerPlayerEntity oldPlayer, ServerPlayerEntity newPlayer, boolean alive) {
         HealthData.setData((IEntityDataSaver) newPlayer, HealthData.retrieveHeartDifference((IEntityDataSaver) oldPlayer));
-        HealthData.refreshHearts((IEntityDataSaver) newPlayer, newPlayer);
+        HealthData.refreshHearts((IEntityDataSaver) newPlayer, newPlayer, false);
         newPlayer.heal(newPlayer.getMaxHealth());
     }
 

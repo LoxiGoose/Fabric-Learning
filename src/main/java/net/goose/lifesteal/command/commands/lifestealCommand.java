@@ -62,7 +62,7 @@ public class lifestealCommand {
                         }
                     }
                     HealthData.setData((IEntityDataSaver) player, heartDifference);
-                    HealthData.refreshHearts((IEntityDataSaver) player, playerthatsentcommand);
+                    HealthData.refreshHearts((IEntityDataSaver) player, playerthatsentcommand, false);
 
                     ItemStack heartCrystal = new ItemStack(ModItems.HEART_CRYSTAL, amount);
                     NbtCompound compoundTag = heartCrystal.getOrCreateNbt().getCompound("lifesteal");
@@ -103,7 +103,7 @@ public class lifestealCommand {
             LivingEntity playerthatsentcommand = source.getPlayer();
 
             HealthData.setData((IEntityDataSaver) playerthatsentcommand, amount);
-            HealthData.refreshHearts((IEntityDataSaver) playerthatsentcommand, playerthatsentcommand);
+            HealthData.refreshHearts((IEntityDataSaver) playerthatsentcommand, playerthatsentcommand, false);
 
             playerthatsentcommand.sendMessage(Text.translatable("Your HitPoint difference has been set to " + amount));
         }
@@ -113,7 +113,7 @@ public class lifestealCommand {
     public static int setHitPoint(ServerCommandSource source, Entity chosenentity, int amount) throws CommandSyntaxException {
         LivingEntity playerthatsentcommand = source.getPlayer();
         HealthData.setData((IEntityDataSaver) chosenentity, amount);
-        HealthData.refreshHearts((IEntityDataSaver) chosenentity, (LivingEntity) chosenentity);
+        HealthData.refreshHearts((IEntityDataSaver) chosenentity, (LivingEntity) chosenentity, false);
         if (chosenentity != playerthatsentcommand && source.isExecutedByPlayer()) {
             playerthatsentcommand.sendMessage(Text.translatable("Set " + chosenentity.getName().getString() + "'s HitPoint difference to " + amount));
         } else if (!source.isExecutedByPlayer()) {
