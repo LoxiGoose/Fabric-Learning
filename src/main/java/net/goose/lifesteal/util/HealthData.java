@@ -97,7 +97,7 @@ public class HealthData{
 
             if (livingEntity instanceof ServerPlayerEntity serverPlayer) {
 
-                if (LifeSteal.config.bannedUponLosingAllHearts.get() && !livingEntity.world.getServer().isSingleplayer()) {
+                if (!livingEntity.world.getServer().isSingleplayer()) {
 
                     Text text = Text.translatable("bannedmessage.lifesteal.lost_max_hearts");
 

@@ -23,7 +23,6 @@ public class Config {
     public final ForgeConfigSpec.ConfigValue advancementUsedForWithdrawing;
     public final ForgeConfigSpec.ConfigValue textUsedForRequirementOnWithdrawing;
     public final ForgeConfigSpec.BooleanValue tellPlayersIfReachedMaxHearts;
-    public final ForgeConfigSpec.BooleanValue bannedUponLosingAllHearts;
 
     public Config(final ForgeConfigSpec.Builder builder) {
         builder.comment("It's recommended to edit the config BEFORE you make/play a world. While editing the config in an already generated world can work sometimes, there may be visual bugs or just bugs in general.");
@@ -33,7 +32,6 @@ public class Config {
         this.loseHeartsOnlyWhenKilledByPlayer = buildBoolean(builder, "Lose Hearts Only When Killed By a Player:",  false, "When this is true, you will lose hearts when killed by a player. Otherwise, you can lose max hearts just by any sorts of death.. (This is overridden by the mob value below if it's true)");
         this.loseHeartsOnlyWhenKilledByMob = buildBoolean(builder, "Lose Hearts Only When Killed By a Mob:",  false, "When this is true, you will lose hearts when killed by a mob. Otherwise, you can lose max hearts just by any sorts of death.");
         this.amountOfHealthLostUponLoss =  buildInt(builder, "Amount of HitPoints/Health Lost/Given Upon Death/Kill:",  2, 1, Integer.MAX_VALUE, "This values modifies the amount of hit points that should be lost when you die. The same also applies when you gain max health from lifestealing. 2 hit points = 1 health.");this.disableHeartLoss = buildBoolean(builder, "Disable Heart Loss:", false, "This value determines if a PLAYER should lose HEARTS AT ALL.");
-        this.bannedUponLosingAllHearts = buildBoolean(builder, "Should Players get Banned When They Lose all Hearts:", true, "When this is false, players that lose all lives/hearts will go into spectator mode. Otherwise, they'll be banned until unbanned. NOTE: If the world is singleplayer, you'll always be set into spectator mode.");
 
         builder.pop();
 
