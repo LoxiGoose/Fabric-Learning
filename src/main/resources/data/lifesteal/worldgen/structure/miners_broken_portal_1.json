@@ -1,5 +1,5 @@
 {
-  "start_pool": "lifesteal:miners_broken_portal/start_pool",                  //<= template_pool
+  "start_pool": "lifesteal:miners_broken_portal_1/start_pool",                  //<= template_pool
   "biomes": "#minecraft:has_structure/ruined_portal_standard",                                 //<= biome or biome tag
   "type": "minecraft:jigsaw",                                    //<= the structure type (almost always "jigsaw")
   "step": "surface_structures",                                  //<= the generation step. possible values: raw_generation, lakes, local_modifications, underground_structures, surface_structures, strongholds, underground_ores, underground_decoration, fluid_springs, vegetal_decoration, and top_layer_modification
