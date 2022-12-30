@@ -2,7 +2,11 @@
   "schemaVersion": 1,
   "id": "lifesteal",
   "version": "${version}",
-
+  "custom": {
+    "cardinal-components": [
+      "lifesteal:bannedmap"
+    ]
+  },
   "name": "Lifesteal",
   "description": "A mod where killing other players steals their hearts. This is a forge interpretation of the Lifesteal SMP.",
   "authors": [
@@ -22,6 +26,9 @@
   "entrypoints": {
     "main": [
       "net.goose.lifesteal.LifeSteal"
+    ],
+    "cardinal-components": [
+      "net.goose.lifesteal.component.ComponentRegistry"
     ],
     "client": [
       "net.goose.lifesteal.LifeStealClient"

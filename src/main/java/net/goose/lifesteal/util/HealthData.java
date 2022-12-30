@@ -3,10 +3,12 @@ package net.goose.lifesteal.util;
 import com.mojang.authlib.GameProfile;
 import net.goose.lifesteal.LifeSteal;
 import net.goose.lifesteal.advancement.ModCriteria;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttributeInstance;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.BannedPlayerEntry;
 import net.minecraft.server.BannedPlayerList;
@@ -89,7 +91,7 @@ public class HealthData {
             ModCriteria.GET_10_MAX_HEARTS.trigger(serverPlayer);
         }
 
-        if (livingEntity.getHealth() > livingEntity.getMaxHealth()) {
+        if (livingEntity.getHealth() > livingEntity.getMaxHealth() || healtoMax) {
             livingEntity.setHealth(livingEntity.getMaxHealth());
         }
 
@@ -100,6 +102,17 @@ public class HealthData {
             if (livingEntity instanceof ServerPlayerEntity serverPlayer) {
 
                 if (!livingEntity.world.getServer().isSingleplayer()) {
+
+                    ItemStack playerHead = new ItemStack(Blocks.PLAYER_HEAD);
+                    NbtCompound skullOwner = new NbtCompound();
+                    skullOwner.putString("Name", serverPlayer.getName().getString());
+                    skullOwner.putUuid("Id", serverPlayer.getUuid());
+
+                    NbtCompound compoundTag = new NbtCompound();
+                    compoundTag.put("SkullOwner", skullOwner);
+                    playerHead.setNbt(compoundTag);
+                    serverPlayer.getInventory().insertStack(playerHead);
+                    serverPlayer.getInventory().dropAll();
 
                     Text text = Text.translatable("bannedmessage.lifesteal.lost_max_hearts");
 
