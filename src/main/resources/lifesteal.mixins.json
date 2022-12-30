@@ -7,7 +7,7 @@
     "ServerPlayerMixin",
     "PlayerMixin",
     "LivingMixin",
-    "ModEntityDataSaverMixin"
+    "EntityDataSaverMixin"
   ],
   "client": [],
   "server": [],

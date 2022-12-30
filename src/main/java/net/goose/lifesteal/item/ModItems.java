@@ -4,6 +4,7 @@ import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.goose.lifesteal.LifeSteal;
 import net.goose.lifesteal.item.custom.HeartCoreItem;
 import net.goose.lifesteal.item.custom.HeartCrystalItem;
+import net.goose.lifesteal.item.custom.ReviveCrystalItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemGroups;
@@ -18,7 +19,8 @@ public class ModItems {
             new HeartCoreItem(new Item.Settings().food(HeartCoreItem.HeartCore)), ModItemGroup.LIFESTEAL, ItemGroups.INGREDIENTS, ItemGroups.FOOD_AND_DRINK);
     public static final Item HEART_CRYSTAL = registerItem("heart_crystal",
             new HeartCrystalItem(new Item.Settings().maxCount(1).fireproof().food(HeartCrystalItem.HeartCrystal)), ModItemGroup.LIFESTEAL, ItemGroups.FOOD_AND_DRINK);
-
+    public static final Item REVIVE_CRYSTAL = registerItem("revive_crystal",
+            new ReviveCrystalItem(new Item.Settings().maxCount(1).fireproof()), ModItemGroup.LIFESTEAL);
     public static Item registerItem(String name, Item item, ItemGroup... itemGroupList){
         for(ItemGroup itemGroup: itemGroupList){
             ItemGroupEvents.modifyEntriesEvent(itemGroup).register(entries -> entries.add(item));

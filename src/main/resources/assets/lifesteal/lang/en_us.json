@@ -3,6 +3,7 @@
   "item.lifesteal.heart_fragment": "Heart Fragment",
   "item.lifesteal.heart_crystal": "Heart Crystal",
   "item.lifesteal.heart_crystal.unnatural": "Unnatural Heart Crystal",
+  "item.lifesteal.revive_crystal": "Revive Crystal",
 
   "block.lifesteal.heart_core_block": "Heart Core Block",
   "block.lifesteal.heart_ore": "Heart Ore",
@@ -14,12 +15,17 @@
   "gui.lifesteal.heart_crystal_reaching_max": "You already have the max amount of hearts",
   "gui.lifesteal.heart_core_at_max_health": "You are already at max health",
   "gui.lifesteal.can't_withdraw_less_than_minimum": "You can't withdraw over the minimum amount of hearts you can lose",
+  "gui.lifesteal.invaild_revive_block": "You need to right click a specified player's head to revive them.",
+  "gui.lifesteal.already_unbanned": "This player is already unbanned or is alive.",
+  "gui.lifesteal.unbanned": "This player has successfully been revived!",
+  "gui.lifesteal.singleplayer": "This item can only be used in multiplayer!",
 
   "bannedmessage.lifesteal.lost_max_hearts": "You have lost all your max hearts, you are now permanently banned till further notice.",
 
   "chat.message.lifesteal.reached_max_hearts": "You have reached max hearts.",
   "chat.message.lifesteal.lost_max_hearts": "You have lost all your max hearts. You are now permanently dead.",
   "chat.message.lifesteal.no_more_hearts_to_steal": "This player doesn't have any hearts you can steal.",
+  "chat.message.lifesteal.revived_player": " has been revived from the dead!",
 
   "itemGroup.lifesteal": "Lifesteal",
 

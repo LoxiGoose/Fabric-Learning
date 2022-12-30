@@ -3,6 +3,12 @@
   "id": "lifesteal",
   "version": "${version}",
 
+  "custom": {
+    "cardinal-components": [
+      "lifesteal:bannedmap"
+    ]
+  },
+
   "name": "Lifesteal",
   "description": "Lifesteal is a Minecraft mod inspired by the original Lifesteal SMP plugin where killing other players steals their hearts for your own gain.",
   "authors": [
@@ -22,6 +28,9 @@
   "entrypoints": {
     "main": [
       "net.goose.lifesteal.LifeSteal"
+    ],
+    "cardinal-components": [
+      "net.goose.lifesteal.component.ComponentRegistry"
     ],
     "client": []
   },
