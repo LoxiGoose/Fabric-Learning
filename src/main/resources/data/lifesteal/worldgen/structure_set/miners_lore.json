@@ -5,11 +5,35 @@
       "weight": 12                                    //<= weight
     },
     {
+      "structure": "lifesteal:miners_home_1",            //<= structure
+      "weight": 10                                    //<= weight
+    },
+    {
+      "structure": "lifesteal:miners_home_2",            //<= structure
+      "weight": 10                                    //<= weight
+    },
+    {
       "structure": "lifesteal:miners_home_taiga",            //<= structure
       "weight": 12                                    //<= weight
     },
     {
+      "structure": "lifesteal:miners_home_taiga_1",            //<= structure
+      "weight": 8                                    //<= weight
+    },
+    {
+      "structure": "lifesteal:miners_home_taiga_2",            //<= structure
+      "weight": 8                                    //<= weight
+    },
+    {
       "structure": "lifesteal:miners_broken_portal",            //<= structure
+      "weight": 24                                    //<= weight
+    },
+    {
+      "structure": "lifesteal:miners_broken_portal_1",            //<= structure
+      "weight": 24                                    //<= weight
+    },
+    {
+      "structure": "lifesteal:miners_broken_portal_2",            //<= structure
       "weight": 24                                    //<= weight
     },
     {
