@@ -89,7 +89,7 @@ public class HealthData{
             ModCriteria.GET_10_MAX_HEARTS.trigger(serverPlayer);
         }
 
-        if(livingEntity.getHealth() > livingEntity.getMaxHealth()){
+        if(livingEntity.getHealth() > livingEntity.getMaxHealth() || healtoMax){
             livingEntity.setHealth(livingEntity.getMaxHealth());
         }
 
