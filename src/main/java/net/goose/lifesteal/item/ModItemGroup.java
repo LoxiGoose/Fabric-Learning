@@ -10,6 +10,6 @@ import net.minecraft.util.Identifier;
 public class ModItemGroup {
     public static final ItemGroup LIFESTEAL = FabricItemGroup.builder(new Identifier(LifeSteal.MOD_ID))
             .displayName(Text.translatable("itemGroup.lifesteal"))
-            .icon(()-> new ItemStack(ModItems.HEART_CRYSTAL))
+            .icon(() -> new ItemStack(ModItems.HEART_CRYSTAL))
             .build();
 }

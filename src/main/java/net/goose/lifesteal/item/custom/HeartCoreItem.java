@@ -13,24 +13,25 @@ import net.minecraft.world.World;
 
 public class HeartCoreItem extends Item {
     public static final FoodComponent HeartCore = (new FoodComponent.Builder().alwaysEdible().build());
+
     public HeartCoreItem(Settings settings) {
         super(settings);
     }
 
     @Override
-    public ItemStack finishUsing(ItemStack itemStack, World world, LivingEntity entity){
-        if(!world.isClient() && entity instanceof ServerPlayerEntity serverPlayer){
-            if(!LifeSteal.config.disableHeartCores.get()){
-                if(entity.getHealth() < entity.getMaxHealth() || !LifeSteal.config.preventFromUsingCoreIfMax.get()){
+    public ItemStack finishUsing(ItemStack itemStack, World world, LivingEntity entity) {
+        if (!world.isClient() && entity instanceof ServerPlayerEntity serverPlayer) {
+            if (!LifeSteal.config.disableHeartCores.get()) {
+                if (entity.getHealth() < entity.getMaxHealth() || !LifeSteal.config.preventFromUsingCoreIfMax.get()) {
                     float maxHealth = entity.getMaxHealth();
-                    float amountThatWillBeHealed = (float) (maxHealth * LifeSteal.config.HeartCoreHeal.get());
+                    float amountThatWillBeHealed = (float) (maxHealth * LifeSteal.config.heartCoreHeal.get());
                     float differenceInHealth = entity.getMaxHealth() - entity.getHealth();
-                    if(differenceInHealth <= amountThatWillBeHealed){
+                    if (differenceInHealth <= amountThatWillBeHealed) {
                         amountThatWillBeHealed = differenceInHealth;
                     }
 
                     int oldDuration = 0;
-                    if(entity.hasStatusEffect(StatusEffects.REGENERATION)){
+                    if (entity.hasStatusEffect(StatusEffects.REGENERATION)) {
                         StatusEffectInstance mobEffect = entity.getStatusEffect(StatusEffects.REGENERATION);
 
                         oldDuration = mobEffect.getDuration();
@@ -38,14 +39,14 @@ public class HeartCoreItem extends Item {
 
                     int tickTime = (int) ((amountThatWillBeHealed * 50) / 2) + oldDuration;
                     entity.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, tickTime, 1));
-                }else{
+                } else {
                     serverPlayer.sendMessageToClient(Text.translatable("gui.lifesteal.heart_core_at_max_health"), true);
                     itemStack.increment(1);
                     serverPlayer.currentScreenHandler.syncState();
                 }
-            }else{
+            } else {
                 serverPlayer.sendMessageToClient(Text.translatable("gui.lifesteal.heart_core_disabled"), true);
-                itemStack.increment(1);;
+                itemStack.increment(1);
                 serverPlayer.currentScreenHandler.syncState();
             }
         }

@@ -14,20 +14,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class LifeSteal implements ModInitializer {
-	public static final String MOD_ID = "lifesteal";
-	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
-	public static Config config;
+    public static final String MOD_ID = "lifesteal";
+    public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+    public static Config config;
 
-	@Override
-	public void onInitialize() {
-		LOGGER.info("Lifestealers are on the loose!");
-		ForgeConfigRegistry.INSTANCE.register(MOD_ID, net.minecraftforge.fml.config.ModConfig.Type.COMMON, ConfigHolder.SERVER_SPEC);
-		config = ConfigHolder.SERVER;
-		ModItems.register();
-		ModBlocks.register();
-		ModEvents.register();
-		ModCommands.register();
-		ModBiomeModifier.register();
-		ModCriteria.register();
-	}
+    @Override
+    public void onInitialize() {
+        LOGGER.info("Lifestealers are on the loose!");
+        ForgeConfigRegistry.INSTANCE.register(MOD_ID, net.minecraftforge.fml.config.ModConfig.Type.COMMON, ConfigHolder.SERVER_SPEC);
+        config = ConfigHolder.SERVER;
+        ModItems.register();
+        ModBlocks.register();
+        ModEvents.register();
+        ModCommands.register();
+        ModBiomeModifier.register();
+        ModCriteria.register();
+    }
 }

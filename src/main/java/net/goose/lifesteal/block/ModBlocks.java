@@ -30,19 +30,20 @@ public class ModBlocks {
             new ExperienceDroppingBlock(FabricBlockSettings.of(Material.STONE).strength(2f).requiresTool().resistance(999f),
                     UniformIntProvider.create(5, 9)), ModItemGroup.LIFESTEAL, ItemGroups.NATURAL);
 
-    public static Block registerBlock(String name, Block block, ItemGroup... itemGroups){
+    public static Block registerBlock(String name, Block block, ItemGroup... itemGroups) {
         registerBlockItem(name, block, itemGroups);
         return Registry.register(Registries.BLOCK, new Identifier(LifeSteal.MOD_ID, name), block);
     }
 
-    public static Item registerBlockItem(String name, Block block, ItemGroup... itemGroupList){
-        for(ItemGroup itemGroup: itemGroupList){
+    public static Item registerBlockItem(String name, Block block, ItemGroup... itemGroupList) {
+        for (ItemGroup itemGroup : itemGroupList) {
             ItemGroupEvents.modifyEntriesEvent(itemGroup).register(entries -> entries.add(block));
         }
         return Registry.register(Registries.ITEM, new Identifier(LifeSteal.MOD_ID, name),
                 new BlockItem(block, new Item.Settings()));
     }
-    public static void register(){
-        LifeSteal.LOGGER.debug("Registering ModBlocks for "+LifeSteal.MOD_ID);
+
+    public static void register() {
+        LifeSteal.LOGGER.debug("Registering ModBlocks for " + LifeSteal.MOD_ID);
     }
 }

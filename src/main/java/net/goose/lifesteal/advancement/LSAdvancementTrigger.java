@@ -1,7 +1,6 @@
 package net.goose.lifesteal.advancement;
 
 import com.google.gson.JsonObject;
-import net.goose.lifesteal.LifeSteal;
 import net.minecraft.advancement.criterion.AbstractCriterion;
 import net.minecraft.advancement.criterion.AbstractCriterionConditions;
 import net.minecraft.advancement.criterion.ConstructBeaconCriterion;
@@ -17,9 +16,10 @@ import net.minecraft.util.Identifier;
 public class LSAdvancementTrigger extends AbstractCriterion<LSAdvancementTrigger.Conditions> {
     public final Identifier ID;
 
-    public LSAdvancementTrigger(Identifier identifier){
+    public LSAdvancementTrigger(Identifier identifier) {
         this.ID = identifier;
     }
+
     @Override
     public Identifier getId() {
         return ID;

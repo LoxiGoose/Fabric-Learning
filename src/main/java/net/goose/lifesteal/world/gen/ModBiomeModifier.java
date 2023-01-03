@@ -27,6 +27,7 @@ public class ModBiomeModifier {
                         HEART_ORE_PLACED);
 
     }
+
     private static BiConsumer<BiomeSelectionContext, BiomeModificationContext> DEEPSLATE_HEART_GEODE_MODIFIER() {
         return (biomeSelectionContext, biomeModificationContext) ->
                 // here we can potentially narrow our biomes down
@@ -38,6 +39,7 @@ public class ModBiomeModifier {
                         DEEPSLATE_HEART_GEODE_PLACED);
 
     }
+
     private static BiConsumer<BiomeSelectionContext, BiomeModificationContext> NETHER_HEART_GEODE_MODIFIER() {
         return (biomeSelectionContext, biomeModificationContext) ->
                 // here we can potentially narrow our biomes down
@@ -49,6 +51,7 @@ public class ModBiomeModifier {
                         NETHER_HEART_GEODE_PLACED);
 
     }
+
     private static BiConsumer<BiomeSelectionContext, BiomeModificationContext> NETHER_HEART_ORE_MODIFIER() {
         return (biomeSelectionContext, biomeModificationContext) ->
                 // here we can potentially narrow our biomes down
@@ -62,8 +65,8 @@ public class ModBiomeModifier {
     }
 
 
-    public static void register(){
-        LifeSteal.LOGGER.debug("Registering world gen for "+LifeSteal.MOD_ID);
+    public static void register() {
+        LifeSteal.LOGGER.debug("Registering world gen for " + LifeSteal.MOD_ID);
         BiomeModifications.create(new Identifier(LifeSteal.MOD_ID, "features"))
                 .add(ModificationPhase.ADDITIONS, BiomeSelectors.foundInOverworld(), HEART_ORE_MODIFIER());
         BiomeModifications.create(new Identifier(LifeSteal.MOD_ID, "features"))

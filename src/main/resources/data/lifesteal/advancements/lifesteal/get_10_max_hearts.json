@@ -9,7 +9,7 @@
     "description": {
       "translate": "advancements.lifesteal.get_10_max_hearts.desc"
     },
-    "frame": "challenge",
+    "frame": "goal",
     "show_toast": true,
     "announce_to_chat": true
   },

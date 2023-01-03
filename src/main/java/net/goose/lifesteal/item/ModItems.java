@@ -21,13 +21,15 @@ public class ModItems {
             new HeartCrystalItem(new Item.Settings().maxCount(1).fireproof().food(HeartCrystalItem.HeartCrystal)), ModItemGroup.LIFESTEAL, ItemGroups.FOOD_AND_DRINK);
     public static final Item REVIVE_CRYSTAL = registerItem("revive_crystal",
             new ReviveCrystalItem(new Item.Settings().maxCount(1).fireproof()), ModItemGroup.LIFESTEAL);
-    public static Item registerItem(String name, Item item, ItemGroup... itemGroupList){
-        for(ItemGroup itemGroup: itemGroupList){
+
+    public static Item registerItem(String name, Item item, ItemGroup... itemGroupList) {
+        for (ItemGroup itemGroup : itemGroupList) {
             ItemGroupEvents.modifyEntriesEvent(itemGroup).register(entries -> entries.add(item));
         }
         return Registry.register(Registries.ITEM, new Identifier(LifeSteal.MOD_ID, name), item);
     }
-    public static void register(){
-        LifeSteal.LOGGER.debug("Registering ModItems for "+ LifeSteal.MOD_ID);
+
+    public static void register() {
+        LifeSteal.LOGGER.debug("Registering ModItems for " + LifeSteal.MOD_ID);
     }
 }

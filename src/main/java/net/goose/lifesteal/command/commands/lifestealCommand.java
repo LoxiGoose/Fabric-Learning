@@ -4,9 +4,9 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.goose.lifesteal.LifeSteal;
+import net.goose.lifesteal.api.IHealthComponent;
+import net.goose.lifesteal.component.ComponentRegistry;
 import net.goose.lifesteal.item.ModItems;
-import net.goose.lifesteal.util.HealthData;
-import net.goose.lifesteal.util.IEntityDataSaver;
 import net.minecraft.advancement.Advancement;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.EntityArgumentType;
@@ -21,7 +21,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 public class lifestealCommand {
-    public static void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess commandRegistryAccess, CommandManager.RegistrationEnvironment registrationEnvironment){
+    public static void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess commandRegistryAccess, CommandManager.RegistrationEnvironment registrationEnvironment) {
         dispatcher.register(
                 CommandManager.literal("ls")
                         .then(CommandManager.literal("withdraw")
@@ -44,34 +44,39 @@ public class lifestealCommand {
                                                 .executes((command) -> setHitPoint(command.getSource(), EntityArgumentType.getEntity(command, "Player"), IntegerArgumentType.getInteger(command, "Amount")))))));
     }
 
-    public static int withdraw(ServerCommandSource source, int amount) throws CommandSyntaxException{
-        if(source.isExecutedByPlayer()){
+    public static int withdraw(ServerCommandSource source, int amount) throws CommandSyntaxException {
+        if (source.isExecutedByPlayer()) {
             final int maximumheartsLoseable = LifeSteal.config.maximumamountofheartsLoseable.get();
             final int startingHitPointDifference = LifeSteal.config.startingHeartDifference.get();
 
             LivingEntity playerthatsentcommand = source.getPlayer();
-            if(playerthatsentcommand instanceof ServerPlayerEntity player){
+            if (playerthatsentcommand instanceof ServerPlayerEntity player) {
                 String advancementUsed = (String) LifeSteal.config.advancementUsedForWithdrawing.get();
 
-                if(source.getPlayer().getAdvancementTracker().getProgress(Advancement.Builder.create().build(new Identifier(advancementUsed))).isDone() || advancementUsed.isEmpty()){
-                    int heartDifference = HealthData.retrieveHeartDifference((IEntityDataSaver) player) - (LifeSteal.config.HeartCrystalAmountGain.get() * amount);
-                    if(maximumheartsLoseable >= 0){
-                        if(heartDifference < startingHitPointDifference - maximumheartsLoseable){
+                if (source.getPlayer().getAdvancementTracker().getProgress(Advancement.Builder.create().build(new Identifier(advancementUsed))).isDone() || advancementUsed.isEmpty()) {
+                    IHealthComponent healthComponent = player.getComponent(ComponentRegistry.HEALTH_DATA);
+                    int heartDifference = healthComponent.getHeartDifference() - (LifeSteal.config.heartCrystalAmountGain.get() * amount);
+                    if (maximumheartsLoseable >= 0) {
+                        if (heartDifference < startingHitPointDifference - maximumheartsLoseable) {
                             player.sendMessageToClient(Text.translatable("gui.lifesteal.can't_withdraw_less_than_minimum"), true);
                             return 1;
                         }
                     }
-                    HealthData.setData((IEntityDataSaver) player,heartDifference);
-                    HealthData.refreshHearts((IEntityDataSaver) player, playerthatsentcommand,false);
+                    healthComponent.setHeartDifference(heartDifference);
+                    healthComponent.refreshHearts(false);
 
                     ItemStack heartCrystal = new ItemStack(ModItems.HEART_CRYSTAL, amount);
                     NbtCompound compoundTag = heartCrystal.getOrCreateNbt().getCompound("lifesteal");
                     compoundTag.putBoolean("Fresh", false);
                     heartCrystal.setCustomName(Text.translatable("item.lifesteal.heart_crystal.unnatural"));
-                    player.getInventory().insertStack(heartCrystal);
-                }else{
+                    if (player.getInventory().getEmptySlot() == -1) {
+                        player.dropItem(heartCrystal, true);
+                    } else {
+                        player.getInventory().insertStack(heartCrystal);
+                    }
+                } else {
                     String text = (String) LifeSteal.config.textUsedForRequirementOnWithdrawing.get();
-                    if(!text.isEmpty()){
+                    if (!text.isEmpty()) {
                         player.sendMessageToClient(Text.literal((String) LifeSteal.config.textUsedForRequirementOnWithdrawing.get()), true);
                     }
                 }
@@ -79,45 +84,53 @@ public class lifestealCommand {
         }
         return 1;
     }
+
     public static int getHitPoint(ServerCommandSource source, Entity chosenentity) throws CommandSyntaxException {
         LivingEntity playerthatsentcommand = source.getPlayer();
-        if(!source.isExecutedByPlayer()){
-            LifeSteal.LOGGER.info(chosenentity.getName().getString() +"'s HitPoint difference is "+ HealthData.retrieveHeartDifference((IEntityDataSaver) chosenentity) + ".");
-        }else{
-            playerthatsentcommand.sendMessage(Text.translatable(chosenentity.getName().getString() +"'s HitPoint difference is "+ HealthData.retrieveHeartDifference((IEntityDataSaver) chosenentity) + "."));
+        IHealthComponent healthComponent = chosenentity.getComponent(ComponentRegistry.HEALTH_DATA);
+        if (!source.isExecutedByPlayer()) {
+            LifeSteal.LOGGER.info(chosenentity.getName().getString() + "'s HitPoint difference is " + healthComponent.getHeartDifference() + ".");
+        } else {
+            playerthatsentcommand.sendMessage(Text.translatable(chosenentity.getName().getString() + "'s HitPoint difference is " + healthComponent.getHeartDifference() + "."));
         }
         return 1;
     }
+
     public static int getHitPoint(ServerCommandSource source) throws CommandSyntaxException {
-        if(source.isExecutedByPlayer()){
+        if (source.isExecutedByPlayer()) {
             LivingEntity playerthatsentcommand = source.getPlayer();
-            playerthatsentcommand.sendMessage(Text.translatable("Your HitPoint difference is "+ HealthData.retrieveHeartDifference((IEntityDataSaver) playerthatsentcommand) + "."));
+            IHealthComponent healthComponent = playerthatsentcommand.getComponent(ComponentRegistry.HEALTH_DATA);
+            playerthatsentcommand.sendMessage(Text.translatable("Your HitPoint difference is " + healthComponent.getHeartDifference() + "."));
         }
         return 1;
     }
-    public static int setHitPoint(ServerCommandSource source, int amount) throws CommandSyntaxException{
-        if(source.isExecutedByPlayer()){
+
+    public static int setHitPoint(ServerCommandSource source, int amount) throws CommandSyntaxException {
+        if (source.isExecutedByPlayer()) {
             LivingEntity playerthatsentcommand = source.getPlayer();
 
-            HealthData.setData((IEntityDataSaver) playerthatsentcommand, amount);
-            HealthData.refreshHearts((IEntityDataSaver) playerthatsentcommand, playerthatsentcommand,false);
+            IHealthComponent healthComponent = playerthatsentcommand.getComponent(ComponentRegistry.HEALTH_DATA);
+            healthComponent.setHeartDifference(amount);
+            healthComponent.refreshHearts(false);
 
-            playerthatsentcommand.sendMessage(Text.translatable("Your HitPoint difference has been set to "+amount));
+            playerthatsentcommand.sendMessage(Text.translatable("Your HitPoint difference has been set to " + amount));
         }
         return 1;
     }
-    public static int setHitPoint(ServerCommandSource source, Entity chosenentity, int amount) throws CommandSyntaxException{
+
+    public static int setHitPoint(ServerCommandSource source, Entity chosenentity, int amount) throws CommandSyntaxException {
         LivingEntity playerthatsentcommand = source.getPlayer();
-        HealthData.setData((IEntityDataSaver) chosenentity, amount);
-        HealthData.refreshHearts((IEntityDataSaver) chosenentity, (LivingEntity) chosenentity,false);
-        if(chosenentity != playerthatsentcommand && source.isExecutedByPlayer()){
-            playerthatsentcommand.sendMessage(Text.translatable("Set "+ chosenentity.getName().getString() +"'s HitPoint difference to "+amount));
-        }else if(!source.isExecutedByPlayer()){
-            LifeSteal.LOGGER.info("Set "+ chosenentity.getName().getString() +"'s HitPoint difference to "+amount);
+        IHealthComponent healthComponent = chosenentity.getComponent(ComponentRegistry.HEALTH_DATA);
+        healthComponent.setHeartDifference(amount);
+        healthComponent.refreshHearts(false);
+        if (chosenentity != playerthatsentcommand && source.isExecutedByPlayer()) {
+            playerthatsentcommand.sendMessage(Text.translatable("Set " + chosenentity.getName().getString() + "'s HitPoint difference to " + amount));
+        } else if (!source.isExecutedByPlayer()) {
+            LifeSteal.LOGGER.info("Set " + chosenentity.getName().getString() + "'s HitPoint difference to " + amount);
         }
 
-        if(LifeSteal.config.tellPlayersIfHitPointChanged.get()){
-            chosenentity.sendMessage(Text.translatable("Your HitPoint difference has been set to "+amount));
+        if (LifeSteal.config.tellPlayersIfHitPointChanged.get()) {
+            chosenentity.sendMessage(Text.translatable("Your HitPoint difference has been set to " + amount));
         }
         return 1;
     }
