@@ -30,7 +30,7 @@ public abstract class PlayerMixin extends LivingEntity {
         final boolean playersGainHeartsifKillednoHeart = LifeSteal.config.playersGainHeartsifKillednoHeart.get();
         final boolean disableLifesteal = LifeSteal.config.disableLifesteal.get();
         final boolean disableHeartLoss = LifeSteal.config.disableHeartLoss.get();
-        final boolean loseHeartsOnlyWhenKilledByMob = LifeSteal.config.loseHeartsOnlyWhenKilledByMob.get();
+        final boolean loseHeartsOnlyWhenKilledByEntity = LifeSteal.config.loseHeartsOnlyWhenKilledByEntity.get();
         final boolean loseHeartsOnlyWhenKilledByPlayer = LifeSteal.config.loseHeartsOnlyWhenKilledByPlayer.get();
 
         LivingEntity killedEntity = this;
@@ -40,6 +40,11 @@ public abstract class PlayerMixin extends LivingEntity {
                 int HeartDifference = HealthData.retrieveHeartDifference((IEntityDataSaver) this);
 
                 LivingEntity killerEntity = killedEntity.getAttacker();
+                boolean killerEntityIsPlayer = killerEntity instanceof ServerPlayerEntity;
+                ServerPlayerEntity serverPlayer = null;
+                if(killerEntityIsPlayer){
+                    serverPlayer = (ServerPlayerEntity) killerEntity;
+                }
 
                 int amountOfHealthLostUponLoss;
 
@@ -57,9 +62,10 @@ public abstract class PlayerMixin extends LivingEntity {
                     }
                 }
 
-                if (killerEntity != null) {
-                    if (killerEntity != killedEntity) {
-                        if (killerEntity instanceof ServerPlayerEntity serverPlayer && !disableLifesteal) {
+                if (killerEntity != null) { // IF THERE IS A KILLER ENTITY
+                    if (killerEntity != killedEntity) { // IF IT'S NOT THEMSELVES (Shooting themselves with an arrow lol)
+                        // EVERYTHING BELOW THIS COMMENT IS CODE FOR MAKING THE KILLER PERSON'S HEART DIFFERENCE GO UP.
+                        if (killerEntityIsPlayer && !disableLifesteal) {
 
                             if (playersGainHeartsifKillednoHeart) {
                                 HealthData.setData((IEntityDataSaver) killerEntity, HealthData.retrieveHeartDifference((IEntityDataSaver) killerEntity) + amountOfHealthLostUponLoss);
@@ -81,30 +87,37 @@ public abstract class PlayerMixin extends LivingEntity {
                                         HealthData.refreshHearts((IEntityDataSaver) killerEntity, killerEntity, false);
                                     }
                                 } else {
-                                    HealthData.setData((IEntityDataSaver) killerEntity, HealthData.retrieveHeartDifference((IEntityDataSaver) killerEntity) + amountOfHealthLostUponLoss);
-                                    HealthData.refreshHearts((IEntityDataSaver) killerEntity, killerEntity, false);
+                                    serverPlayer.sendMessage(Text.translatable("chat.message.lifesteal.no_more_hearts_to_steal"));
                                 }
                             }
 
                         }
 
-                        if (!disableLifesteal) {
-                            if (!loseHeartsOnlyWhenKilledByMob && loseHeartsOnlyWhenKilledByPlayer) {
-                                if (killerEntity instanceof PlayerEntity) {
+                        // EVERYTHING BELOW THIS COMMENT IS CODE FOR LOWERING THE KILLED PERSON'S HEART DIFFERENCE IF THERE WAS A KILLER ENTITY
+                        if(!disableHeartLoss){
+                            if(loseHeartsOnlyWhenKilledByPlayer && !loseHeartsOnlyWhenKilledByEntity){
+                                if(killerEntityIsPlayer && !disableLifesteal){
                                     HealthData.setData((IEntityDataSaver) killedEntity, HealthData.retrieveHeartDifference((IEntityDataSaver) killedEntity) - amountOfHealthLostUponLoss);
                                     HealthData.refreshHearts((IEntityDataSaver) killedEntity, killedEntity, false);
                                 }
-                            } else {
-                                HealthData.setData((IEntityDataSaver) killedEntity, HealthData.retrieveHeartDifference((IEntityDataSaver) killedEntity) - amountOfHealthLostUponLoss);
-                                HealthData.refreshHearts((IEntityDataSaver) killedEntity, killedEntity, false);
+                            }else{
+                                if(disableLifesteal){
+                                    if(!killerEntityIsPlayer){
+                                        HealthData.setData((IEntityDataSaver) killedEntity, HealthData.retrieveHeartDifference((IEntityDataSaver) killedEntity) - amountOfHealthLostUponLoss);
+                                        HealthData.refreshHearts((IEntityDataSaver) killedEntity, killedEntity, false);
+                                    }
+                                }else{
+                                    HealthData.setData((IEntityDataSaver) killedEntity, HealthData.retrieveHeartDifference((IEntityDataSaver) killedEntity) - amountOfHealthLostUponLoss);
+                                    HealthData.refreshHearts((IEntityDataSaver) killedEntity, killedEntity, false);
+                                }
                             }
                         }
-                    } else {
+                    } else if (!disableHeartLoss) { // IF THIS IS THEMSELVES
                         HealthData.setData((IEntityDataSaver) killedEntity, HealthData.retrieveHeartDifference((IEntityDataSaver) killedEntity) - amountOfHealthLostUponLoss);
                         HealthData.refreshHearts((IEntityDataSaver) killedEntity, killedEntity, false);
                     }
                 } else {
-                    if (!loseHeartsOnlyWhenKilledByMob && !loseHeartsOnlyWhenKilledByPlayer) {
+                    if (!loseHeartsOnlyWhenKilledByEntity && !loseHeartsOnlyWhenKilledByPlayer && !disableHeartLoss) {
                         HealthData.setData((IEntityDataSaver) killedEntity, HealthData.retrieveHeartDifference((IEntityDataSaver) killedEntity) - amountOfHealthLostUponLoss);
                         HealthData.refreshHearts((IEntityDataSaver) killedEntity, killedEntity, false);
                     }
