@@ -24,7 +24,7 @@ public class HeartCoreItem extends Item {
             if (!LifeSteal.config.disableHeartCores.get()) {
                 if (entity.getHealth() < entity.getMaxHealth() || !LifeSteal.config.preventFromUsingCoreIfMax.get()) {
                     float maxHealth = entity.getMaxHealth();
-                    float amountThatWillBeHealed = (float) (maxHealth * LifeSteal.config.HeartCoreHeal.get());
+                    float amountThatWillBeHealed = (float) (maxHealth * LifeSteal.config.heartCoreHeal.get());
                     float differenceInHealth = entity.getMaxHealth() - entity.getHealth();
                     if (differenceInHealth <= amountThatWillBeHealed) {
                         amountThatWillBeHealed = differenceInHealth;

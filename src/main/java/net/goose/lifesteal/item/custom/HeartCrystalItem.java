@@ -1,8 +1,8 @@
 package net.goose.lifesteal.item.custom;
 
 import net.goose.lifesteal.LifeSteal;
-import net.goose.lifesteal.util.HealthData;
-import net.goose.lifesteal.util.IEntityDataSaver;
+import net.goose.lifesteal.api.IHealthComponent;
+import net.goose.lifesteal.component.ComponentRegistry;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
@@ -33,8 +33,8 @@ public class HeartCrystalItem extends Item {
         if (!world.isClient() && entity instanceof ServerPlayerEntity serverPlayer) {
 
             if (!LifeSteal.config.disableHeartCrystals.get()) {
-                IEntityDataSaver dataSaver = (IEntityDataSaver) serverPlayer;
-                int currentheartDifference = HealthData.retrieveHeartDifference(dataSaver);
+                IHealthComponent healthComponent = entity.getComponent(ComponentRegistry.HEALTH_DATA);
+                int currentheartDifference = healthComponent.getHeartDifference();
 
                 if (LifeSteal.config.maximumamountofheartsGainable.get() > -1 && LifeSteal.config.preventFromUsingCrystalIfMax.get()) {
                     int maximumheartDifference = LifeSteal.config.startingHeartDifference.get() + LifeSteal.config.maximumamountofheartsGainable.get();
@@ -46,10 +46,10 @@ public class HeartCrystalItem extends Item {
                     }
                 }
 
-                int newheartDifference = currentheartDifference + LifeSteal.config.HeartCrystalAmountGain.get();
+                int newheartDifference = currentheartDifference + LifeSteal.config.heartCrystalAmountGain.get();
 
-                HealthData.setData(dataSaver, newheartDifference);
-                HealthData.refreshHearts(dataSaver, entity, false);
+                healthComponent.setHeartDifference(newheartDifference);
+                healthComponent.refreshHearts(false);
 
                 // Formula, for every hit point, increase duration of the regeneration by 50 ticks: TickDuration = MaxHealth * 50
                 NbtCompound nbt = item.getNbt();

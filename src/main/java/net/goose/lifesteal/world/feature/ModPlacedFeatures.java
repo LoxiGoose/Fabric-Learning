@@ -22,7 +22,7 @@ public class ModPlacedFeatures {
             HeightRangePlacementModifier.uniform(YOffset.aboveBottom(0), YOffset.aboveBottom(-45)),
             BiomePlacementModifier.of());
     public static final RegistryEntry<PlacedFeature> NETHER_HEART_GEODE_PLACED = PlacedFeatures.register("nether_heart_geode_placed",
-            ModConfiguredFeatures.DEEPSLATE_HEART_GEODE, RarityFilterPlacementModifier.of(30),
+            ModConfiguredFeatures.NETHER_HEART_GEODE, RarityFilterPlacementModifier.of(30),
             SquarePlacementModifier.of(),
             HeightRangePlacementModifier.uniform(YOffset.aboveBottom(10), YOffset.aboveBottom(30)),
             BiomePlacementModifier.of());

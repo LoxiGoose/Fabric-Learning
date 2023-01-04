@@ -1,5 +1,7 @@
-package net.goose.lifesteal.util;
+package net.goose.lifesteal.component.components;
 
+import net.goose.lifesteal.api.ILevelComponent;
+import net.goose.lifesteal.component.ComponentRegistry;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtHelper;
 import net.minecraft.nbt.NbtList;
@@ -10,34 +12,40 @@ import org.jetbrains.annotations.Nullable;
 import java.util.HashMap;
 import java.util.UUID;
 
-public class WorldComponent implements IWorldComponent {
+public class LevelComponent implements ILevelComponent {
     private final World level;
 
-    public WorldComponent(@Nullable final World level) {
+    public LevelComponent(@Nullable final World level) {
         this.level = level;
     }
 
-    private HashMap<UUID, BlockPos> bannedMap = new HashMap<>();
+    private final HashMap<UUID, BlockPos> bannedMap = new HashMap<>();
 
     @Override
     public HashMap getMap() {
         return bannedMap;
     }
+
     @Override
-    public void setBannedUUIDanditsBlockPos(UUID uuid, BlockPos blockPos) {
-        bannedMap.put(uuid, blockPos);
+    public void setUUIDanditsBlockPos(UUID uuid, BlockPos blockPos) {
+        if (!bannedMap.containsKey(uuid)) {
+            bannedMap.put(uuid, blockPos);
+            ComponentRegistry.UUID_AND_BLOCKPOS_MAP.sync(this.level);
+        }
     }
 
     @Override
-    public void removeBannedUUIDanditsBlockPos(UUID uuid, BlockPos blockPos) {
-        bannedMap.remove(uuid, blockPos);
+    public void removeUUIDanditsBlockPos(UUID uuid, BlockPos blockPos) {
+        if (bannedMap.containsKey(uuid)) {
+            bannedMap.remove(uuid, blockPos);
+        }
     }
 
     @Override
     public void writeToNbt(NbtCompound tag) {
         NbtList listTag = new NbtList();
 
-        for(UUID uuid: bannedMap.keySet()){
+        for (UUID uuid : bannedMap.keySet()) {
 
             NbtCompound playerCompoundTag = new NbtCompound();
             BlockPos blockPos = bannedMap.get(uuid);
@@ -53,12 +61,12 @@ public class WorldComponent implements IWorldComponent {
     @Override
     public void readFromNbt(NbtCompound tag) {
         NbtList listTag = (NbtList) tag.get("Map");
-        listTag.forEach( (tag1) -> {
+        listTag.forEach((tag1) -> {
             NbtCompound compoundTag = (NbtCompound) tag1;
             UUID uuid = compoundTag.getUuid("Key");
             BlockPos blockPos = NbtHelper.toBlockPos(compoundTag.getCompound("Value"));
 
-            setBannedUUIDanditsBlockPos(uuid, blockPos);
+            setUUIDanditsBlockPos(uuid, blockPos);
         });
     }
 }
